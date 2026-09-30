@@ -1,85 +1,111 @@
-# CampusOS-TPO: Training & Placement Officer Command Center
+# CampusOS: Dual-Engine Institutional Placement & Student AI Intelligence Platform
 
-> Autonomous Placement Intelligence, Real-Time Student Analytics, and Deterministic Accreditation Automation for Higher Education Institutions.
+> Autonomous Placement Intelligence, Student Career Operating System, and Deterministic Accreditation Automation for Higher Education Institutions.
 
 Built by **AIVI Intelligence Private Limited** (CIN: `U62099UP2026PTC249169` | DPIIT: `#DIPP271794`).
 
 ---
 
-## Overview
+## System Architecture
 
-**CampusOS-TPO** is the institutional intelligence command center designed for Training & Placement Officers (TPOs), Deans, and Placement Coordinators. It transforms fragmented placement drives, manual spreadsheets, and stressful accreditation preparation into a real-time, telemetry-driven operating system.
+CampusOS provides a synchronized dual-portal architecture:
 
-The platform bridges institutional leadership with corporate recruiters and student cohorts, tracking 3,420+ students across engineering, management, and technology disciplines with verified skill metrics, interview telemetry, and automated compliance.
+1. **TPO Command Center (`index.html` | `TpoDashboard.tsx`):**
+   - High-velocity administrative dashboard for Training & Placement Officers, Deans, and Placement Volunteers.
+   - Cohort telemetry, dynamic readiness funnel, company pipeline CRM, NAAC Metric 5.2.1 and NIRF 3.a automated compliance exporter, offer letter dispatch, and at-risk student rescue queue.
 
----
+2. **Student OS & AI Career Intelligence Suite (`student.html` | `StudentDashboard.tsx`):**
+   - Candidate-facing career operating system for undergraduate and postgraduate students.
+   - Corporate drive discovery, ATS resume audits, multi-mode resume studio, deep job fit analysis, bilingual AI voice interview telemetry, skill roadmaps, and LinkedIn optimization.
 
-## Key Modules & Capabilities
-
-### 1. Executive Overview & Placement Analytics
-- **Live Institutional KPI Grid:** Real-time visibility into overall placement rate (83.4%), average CTC (₹8.4 LPA), highest offer (₹44.0 LPA), active recruiters (142), and live interview slots.
-- **Dynamic 6-Tier Readiness Funnel:** Visual cohort tracking from Initial Enrolled (3,420) through Resume Approved, Skill Assessed, AI Interview Cleared, Corporate Shortlisted, to Final Offers Released (2,852).
-- **Placement & Package Distribution Heatmap:** Dual-engine visualizer mapping department-wise placement velocity (CSE, ECE, ME, Civil, IT, AI & Data Science) and salary package tiers (Tier 1 >₹20 LPA, Tier 2 ₹10-20 LPA, Tier 3 ₹5-10 LPA, Core Placement ₹3-5 LPA).
-- **Live Activity Feed:** Instant alerts on newly released offer letters, recruiter shortlist submissions, and upcoming drive rounds.
-
-### 2. Student Roster & Live Skill Radar
-- **Comprehensive Cohort Roster:** Real-time searchable directory with department filters, year selectors, AES readiness bands, and instant verification status tags.
-- **AiVi Employability Score (AES):** Multi-dimensional index combining algorithmic problem solving, core technical aptitude, communication clarity, and resume ATS compatibility.
-- **Interactive Slide-Over Drawer:** Full student profiling drawer featuring:
-  - Detailed score breakdown across System Design, Coding, and STAR Verbal rubrics.
-  - Verified ATS-tested resume download (100% Taleo and Workday compliant).
-  - One-click drive nomination and interview scheduling.
-  - Direct student alert trigger for remediation and guidance.
-
-### 3. Company Drives & Pipeline CRM
-- **Recruitment Pipeline Management:** Stage-by-stage tracking of ongoing corporate drives (Application Open, Online Assessment, Technical Rounds, HR & Final Round, Offers Released).
-- **Recruiter Profile Cards:** CTC brackets, role definitions, minimum CGPA / AES eligibility criteria, and real-time applicant tallies.
-- **Direct Drive Creation Modal:** Launch new campus recruitment drives with custom eligibility thresholds and automated student notifications.
-
-### 4. AI Interview Lab & Voice Telemetry
-- **Sarvam AI Bilingual Voice Telemetry:** Live simulation of mock and technical interviews evaluating speech pace (Words Per Minute), fillers, and structured articulation.
-- **Animated Audio Waveform Kinetics:** Real-time CSS speech wave equalizers visualizing active student response streams.
-- **STAR Response Rubric:** Automated scoring across Situation, Task, Action, and Result dimensions.
-- **Real-Time Coaching Recommendations:** Granular feedback identifying key strengths and specific growth areas for every mock interview session.
-
-### 5. NAAC 5.2.1 & NIRF 3.a Automated Compliance Engine
-- **Deterministic Accreditation Exporter:** Instant generation of audit-ready documentation for NAAC Metric 5.2.1 (Placement of Outgoing Students) and NIRF Parameter 3.a (Graduation Outcome).
-- **Cryptographic Verification Proofs:** One-click verifiable digital audit trails mapping enrolled students to authenticated offer letters and corporate GSTIN credentials.
-- **SSR / SAR One-Click Export:** Download clean CSV and institutional PDF compliance bundles ready for peer-team visits.
-
-### 6. Placement Automation & Tamper-Proof Offer Letters
-- **QR-Sealed Digital Offer Letters:** Automated generation of digitally sealed, tamper-proof offer validation documents.
-- **Instant Recruiter Handshake:** Direct corporate confirmation portal verifying authenticity of released offers without manual phone verification.
-- **Batch Dispatch Protocol:** Single-click distribution of letters to candidates and respective department heads.
-
-### 7. At-Risk Student Rescue Queue
-- **Radar Pulse Alert System:** Automated anomaly detection flagging students with low mock interview scores or below-threshold AES indices.
-- **Root Cause Diagnostics:** Granular categorization of risk factors (e.g. conversational hesitation, technical syntax gaps, resume ATS parsing failure).
-- **Remediation Action Plans:** One-click assignment to peer-mentorship cohorts, AI booster modules, or personalized 1-on-1 counseling clinics.
-
-### 8. Staff Roles, Permissions & Institutional Audit Trail
-- **Granular Role-Based Access Control (RBAC):** Distinct administrative profiles for TPO Head, Department Coordinators, Faculty Mentors, and Student Placement Volunteers.
-- **Complete Action Audit Log:** Immutable event log tracking every export, permission adjustment, and eligibility override for institutional transparency.
+Both portals are directly linked with a seamless role-switching header for instant demonstration and institutional workflows.
 
 ---
 
-## Motion & Prototype Kinetics
+## Student OS Modules & Capabilities (`student.html`)
 
-CampusOS-TPO reproduces the interactive feel of the original Figma prototype through custom kinetic design:
+### 1. My Placement Drives (Student Dashboard Home)
+- **Live Corporate Opportunity Cards:** Interactive cards for active campus recruiters (TCS Digital, Amazon AWS India, Accenture Tech) with role definitions and verified eligibility badges.
+- **Package Brackets & Details:** Clear compensation tiering (₹4.5 LPA to ₹18.0 LPA) with verified batch and specialization criteria.
+- **Dedicated Company AI Voice Packs:** 1-click launch of company-specific mock interview simulations directly from the drive card.
+- **Direct Job Fit Match:** 1-click bridge sending the company requirements directly into the Job Fit Analyzer.
+
+### 2. 7-Day Sprints & Placement Campaigns
+- **Daily Readiness Milestones:** Structured 7-day preparation sprints (e.g. Day 1 Resume Polish, Day 2 DSA Challenge, Day 4 Sarvam Voice Mock).
+- **Gamified Progress Tracking:** Live status indicators and sprint completion benchmarks.
+
+### 3. My Verified Resume Vault
+- **Institutional Authentication:** Digital resume registry stamped and cryptographically sealed by the university T&P cell.
+- **Tamper-Proof QR Validation:** Scannable validation seal for instant recruiter verification.
+- **Parser Match Scores:** Verified ATS benchmarks (98% Taleo match, 96% Workday match, 100% action verbs).
+
+### 4. Resume Intelligence & ATS Audit
+- **v3.4 Neural Diagnostic Engine:** Automated analysis across 6 dimensions: ATS compatibility, keyword density, technical depth, leadership signals, quantified impact, and clarity.
+- **Dual Input Modes:** Paste plain text or drag-and-drop PDF (up to 10MB).
+- **Past Scan History & Audit Modal:** Historical audit logs tracking score evolution (e.g. 84/100 Tier A, 78/100 Tier B+) with instant drill-down.
+
+### 5. Resume Studio (4 Phase-1 Entry Paths)
+- **Full Rebuild:** Reconstruct existing resumes into clean, role-tailored drafts.
+- **Quick Edit:** Guided targeted modifications without forcing full rewrites.
+- **JD Tailor:** Align resume bullet points directly with target job descriptions.
+- **First Resume for Freshers:** Structured builder for entry-level candidates without prior resume documents.
+- **Guided AI Instruction Box:** Prompt-driven adjustments with quick suggestion chips ("Make it more ATS friendly", "Shorten to 1 page", "Add stronger metrics").
+- **Tone & Role Selectors:** Custom styling across Impact-driven, Executive, Concise, Technical, and Creative registers.
+
+### 6. Job Fit & Skill Overlap Analyzer
+- **Dual-Pane Workstation:** Side-by-side comparison of candidate resume against target job description.
+- **Shortlist Probability & Match Scoring:** Instant semantic score calculation (e.g. 88% overall match, 92% technical skills, 85% experience).
+- **Severity-Based Gap Detection:** Categorizes missing competencies into critical prerequisites and secondary recommendations.
+
+### 7. AI Interview Lab & Voice Telemetry
+- **Full-Duplex Real-Time Voice Studio:** 2-way conversational voice simulation with Sarvam AI bilingual telemetry, live sound wave equalizer kinetics, and sub-second turn latency.
+- **Question-by-Question Drill:** Structured turn-by-turn mock sessions with Hinglish / English language context and configurable question counts (3, 6, 10, or 15 questions).
+- **Forensic Feedback Scorecard:** Automated grading on speech pace (Words Per Minute), filler words, and STAR articulation.
+
+### 8. Skill Roadmap Section
+- **Personalized 30 / 60 / 90-Day Learning Tracks:** Generates structured learning milestones based on selected skill gaps and optional resume context.
+- **Curated Resource Recommendations:** Staged guides covering Docker, AWS, Redis caching, microservices, and system design.
+
+### 9. LinkedIn Optimizer
+- **Public Profile Conversion Surface:** Evaluates LinkedIn profile positioning from a recruiter discovery perspective.
+- **Search Visibility & Authority Scoring:** 86/100 authority benchmark with keyword density metrics.
+- **AI Rewrite Layer:** Generates high-impact headline and summary rewrites tailored for campus hiring cycles.
+
+---
+
+## TPO Command Center Modules (`index.html`)
+
+1. **Executive Overview & Placement Analytics:** Real-time KPI cards, 6-pillar readiness funnel, package distribution heatmaps, and live activity feed.
+2. **Student Roster & Skill Radar:** Searchable cohort directory, AES score indices, and interactive slide-over student profiles.
+3. **Company Drives CRM:** Pipeline stages (Application Open to Offers Released), eligibility filters, and drive scheduler.
+4. **AI Interview Lab (TPO Oversight):** Cohort mock interview statistics and speech telemetry analysis.
+5. **NAAC 5.2.1 & NIRF 3.a Automated Compliance Engine:** 1-click deterministic SSR/SAR export bundles with verifiable audit trails.
+6. **Placement Automation & Offer Letters:** Tamper-proof digital offer letters with cryptographic QR seals.
+7. **At-Risk Student Rescue Queue:** Automated anomaly detection and remediation clinic allocation.
+8. **Staff Roles & RBAC:** Granular role profiles and tamper-proof action audit logging.
+
+---
+
+## Prototype Motion & Animation Kinetics
+
+CampusOS reproduces the interactive kinetics of the original Figma prototype:
 - **Tab Cross-Fade & Elevation:** Smooth transitions using cubic-bezier timing curves (`320ms cubic-bezier(0.16, 1, 0.3, 1)`).
 - **SVG Donut Score Gauge:** Circular stroke animation (`stroke-dashoffset` transition over 1,300ms) with synchronized count-up counter.
 - **Cohort Funnel Growth:** Staggered cylinder expansion with hover elevation and tooltips.
-- **Staggered Table Ingestion:** Progressive row entrance animations mimicking fast database rendering.
-- **Spring-Physics Slide Drawer:** Smooth side drawer with backdrop blur and dynamic progress bar fills.
 - **Live Sound Wave Animation:** 4-bar alternating equalizer representing live bilingual voice telemetry.
-- **Radar Alert Pulse:** Pulsing concentric rings on at-risk student records.
+- **Radar Alert Pulse:** Pulsing concentric rings on at-risk student records and active voice recruiters.
+- **Spring-Physics Slide Drawer:** Smooth side drawer with backdrop blur and dynamic progress bar fills.
 
 ---
 
 ## Technical Stack & Architecture
 
-- **Web SPA:** Vanilla ES6+ / HTML5 Canvas / Tailwind CSS / Lucide Icons / Chart.js.
-- **React / Next.js Component:** Full-featured TypeScript component (`TpoDashboard.tsx`) with strict typing, modular subcomponents, and responsive state hooks.
+- **Web SPAs:** Vanilla ES6+ / HTML5 Canvas / Tailwind CSS / Lucide Icons / Chart.js.
+  - `index.html`: TPO Command Center
+  - `student.html`: Student OS & AI Career Intelligence Suite
+- **React / Next.js Components:**
+  - `TpoDashboard.tsx`: Production TypeScript component for TPO Command Center.
+  - `StudentDashboard.tsx`: Production TypeScript component for Student OS.
 - **Corporate Entity:** AIVI Intelligence Private Limited
 - **Official Domains:**
   - Campus OS Institutional Portal: https://aivicampus.com
@@ -89,8 +115,8 @@ CampusOS-TPO reproduces the interactive feel of the original Figma prototype thr
 
 ## Quick Start
 
-### Option 1: Standalone Web SPA
-Simply serve the `index.html` file using any static file server:
+### Option 1: Standalone Web SPAs
+Run the built-in static HTTP server:
 
 ```bash
 # Using Python 3
@@ -100,25 +126,30 @@ python3 -m http.server 3000
 npx serve .
 ```
 
-Open `http://localhost:3000` in your web browser.
+- Access **TPO Command Center**: `http://localhost:3000/` or `http://localhost:3000/index.html`
+- Access **Student OS Portal**: `http://localhost:3000/student.html`
+- Use the **Switch to Student Portal / Switch to TPO Command** buttons in either header to toggle seamlessly!
 
 ### Option 2: React / Next.js Integration
-Import the `TpoDashboard.tsx` component into your React or Next.js application:
+Import either component into your React or Next.js pages:
 
 ```tsx
 import React from 'react';
 import TpoDashboard from './TpoDashboard';
+import StudentDashboard from './StudentDashboard';
 
-export default function PlacementPage() {
+export default function CampusOSPage() {
+  const [role, setRole] = React.useState<'tpo' | 'student'>('student');
+
   return (
-    <main className="min-h-screen bg-slate-950">
-      <TpoDashboard />
+    <main className="min-h-screen bg-[#080d1a]">
+      {role === 'tpo' ? <TpoDashboard /> : <StudentDashboard />}
     </main>
   );
 }
 ```
 
-Ensure Tailwind CSS and Lucide icons are configured in your project dependencies:
+Ensure Tailwind CSS and Lucide icons are installed:
 ```bash
 npm install lucide-react clsx tailwind-merge
 ```
