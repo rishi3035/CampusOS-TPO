@@ -41,10 +41,16 @@ import {
   Edit,
   Linkedin,
   Download,
-  ArrowLeftRight
+  ArrowLeftRight,
+  HelpCircle,
+  LogIn,
+  X,
+  MicOff,
+  Calendar,
+  Mail,
+  Shield
 } from 'lucide-react';
 
-// Data Types
 export interface DriveItem {
   id: string;
   company: string;
@@ -75,11 +81,15 @@ export interface StagedRoadmapItem {
 export const StudentDashboard: React.FC = () => {
   // Navigation State
   const [activeTab, setActiveTab] = useState<
-    'drives' | 'sprints' | 'vault' | 'resume-intelligence' | 'resume-studio' | 'job-fit' | 'interview-lab' | 'skill-roadmap' | 'linkedin-optimizer'
+    'drives' | 'sprints' | 'vault' | 'resume-intelligence' | 'resume-studio' | 'job-fit' | 'interview-lab' | 'skill-roadmap' | 'linkedin-optimizer' | 'contact'
   >('drives');
 
-  // Notifications State
+  // Modals State
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showVoiceModal, setShowVoiceModal] = useState(false);
+  const [showDraftModal, setShowDraftModal] = useState(false);
+  const [selectedAudit, setSelectedAudit] = useState<PastAuditItem | null>(null);
 
   // Resume Intelligence State
   const [resumeInputMode, setResumeInputMode] = useState<'paste' | 'upload'>('paste');
@@ -332,6 +342,32 @@ export const StudentDashboard: React.FC = () => {
               </div>
             </div>
 
+            {/* Group 3: Support & Access */}
+            <div>
+              <div className="px-3 mb-2 flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Support & Access</span>
+              </div>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setActiveTab('contact')}
+                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition ${
+                    activeTab === 'contact' ? 'bg-slate-800 text-white font-semibold' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                  }`}
+                >
+                  <HelpCircle className="w-4 h-4 text-teal-400" />
+                  <span>Contact & Book Demo</span>
+                </button>
+
+                <button
+                  onClick={() => setShowLoginModal(true)}
+                  className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition"
+                >
+                  <LogIn className="w-4 h-4 text-blue-400" />
+                  <span>Student Sign In</span>
+                </button>
+              </div>
+            </div>
+
           </nav>
 
           {/* Account Footer */}
@@ -346,7 +382,10 @@ export const StudentDashboard: React.FC = () => {
                   <p className="text-[10px] text-slate-400 truncate">B.Tech CSE · Batch 2026</p>
                 </div>
               </div>
-              <button className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+              <button 
+                onClick={() => setShowLoginModal(true)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              >
                 <Settings className="w-4 h-4" />
               </button>
             </div>
@@ -360,8 +399,6 @@ export const StudentDashboard: React.FC = () => {
         
         {/* Top Header */}
         <header className="h-16 border-b border-slate-800/80 px-8 flex items-center justify-between sticky top-0 bg-[#080d1a]/85 backdrop-blur-md z-20">
-          
-          {/* Search Box */}
           <div className="relative w-96">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input 
@@ -372,9 +409,7 @@ export const StudentDashboard: React.FC = () => {
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-500 bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-700/50">⌘K</span>
           </div>
 
-          {/* Right Header Utilities */}
           <div className="flex items-center space-x-4">
-            
             <a 
               href="index.html" 
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-500/20 transition"
@@ -388,7 +423,6 @@ export const StudentDashboard: React.FC = () => {
               <span>Placement Season 2025-26 Active</span>
             </div>
 
-            {/* Notification Dropdown Toggle */}
             <div className="relative">
               <button 
                 onClick={() => setShowNotifications(!showNotifications)} 
@@ -399,7 +433,6 @@ export const StudentDashboard: React.FC = () => {
               </button>
             </div>
 
-            {/* Student Profile Pill */}
             <div className="flex items-center space-x-3 pl-2 border-l border-slate-800">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-rose-500 flex items-center justify-center font-bold text-xs text-white">
                 AM
@@ -409,11 +442,10 @@ export const StudentDashboard: React.FC = () => {
                 <p className="text-[10px] text-slate-400">CGPA 8.8 · CSE</p>
               </div>
             </div>
-
           </div>
         </header>
 
-        {/* Dynamic Workspace Container */}
+        {/* Dynamic Workspace */}
         <div className="p-8 max-w-7xl w-full mx-auto space-y-8 flex-1">
           
           {/* TAB 1: MY PLACEMENT DRIVES */}
@@ -434,14 +466,14 @@ export const StudentDashboard: React.FC = () => {
                 </div>
                 <button 
                   onClick={() => setActiveTab('sprints')}
-                  className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-semibold text-xs shadow-lg shadow-rose-500/25 transition"
+                  className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 text-white font-semibold text-xs shadow-lg shadow-rose-500/25 transition"
                 >
                   <Zap className="w-4 h-4" />
                   <span>Launch New AI Sprint</span>
                 </button>
               </div>
 
-              {/* Metric Badges */}
+              {/* Metric Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl">
                   <div className="flex items-center justify-between text-slate-400 text-xs">
@@ -513,7 +545,10 @@ export const StudentDashboard: React.FC = () => {
                           <span className="text-xs font-semibold text-slate-300">{d.voicePackName}</span>
                         </div>
                         <button 
-                          onClick={() => setActiveTab('interview-lab')}
+                          onClick={() => {
+                            setActiveTab('interview-lab');
+                            setShowVoiceModal(true);
+                          }}
                           className="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center space-x-1"
                         >
                           <span>Open Pack</span>
@@ -573,7 +608,7 @@ export const StudentDashboard: React.FC = () => {
                     </div>
 
                     <p className="text-xs text-slate-300 leading-relaxed">
-                      The Resume Intelligence Engine performs a comprehensive analysis of your resume across six critical dimensions: ATS compatibility, keyword optimization, technical depth, leadership signals, quantification of achievements, and overall clarity.
+                      The Resume Intelligence Engine performs a comprehensive analysis across six critical dimensions: ATS compatibility, keyword optimization, technical depth, leadership signals, quantified achievements, and clarity.
                     </p>
 
                     <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-400 flex items-start space-x-2">
@@ -629,7 +664,7 @@ export const StudentDashboard: React.FC = () => {
                         <span>ATS Parsers: Taleo, Workday, Greenhouse certified</span>
                       </div>
                       <button 
-                        onClick={() => alert('Scanning resume with AIVI v3.4 Neural... AES Score: 88/100 (Tier A+)')}
+                        onClick={() => setShowDraftModal(true)}
                         className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 text-white font-semibold text-xs shadow-lg shadow-indigo-500/25 flex items-center justify-center space-x-2 transition"
                       >
                         <span>Build Resume Draft</span>
@@ -664,7 +699,12 @@ export const StudentDashboard: React.FC = () => {
                           </div>
                           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800/80">
                             <span className="text-slate-400">AES Index: <strong className="text-emerald-400">{pa.tier}</strong></span>
-                            <span className="text-indigo-400 cursor-pointer hover:underline">Audit Report</span>
+                            <button 
+                              onClick={() => setSelectedAudit(pa)}
+                              className="text-indigo-400 hover:text-indigo-300 font-semibold"
+                            >
+                              Audit Report
+                            </button>
                           </div>
                         </div>
                       ))}
@@ -811,7 +851,7 @@ export const StudentDashboard: React.FC = () => {
 
                 <div className="flex justify-end pt-4 border-t border-slate-800">
                   <button 
-                    onClick={() => alert('Generating role-tailored resume draft...')}
+                    onClick={() => setShowDraftModal(true)}
                     className="px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 text-white font-bold text-xs shadow-lg shadow-cyan-500/25 flex items-center space-x-2 transition"
                   >
                     <Sparkles className="w-4 h-4" />
@@ -996,7 +1036,7 @@ export const StudentDashboard: React.FC = () => {
 
                       <div className="pt-4">
                         <button 
-                          onClick={() => alert('Real-Time Voice Studio connected to Sarvam AI telemetry. Speak now into your microphone!')}
+                          onClick={() => setShowVoiceModal(true)}
                           className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-indigo-600 hover:from-rose-600 text-white font-bold text-sm shadow-xl flex items-center space-x-3 transition"
                         >
                           <Mic className="w-5 h-5" />
@@ -1269,12 +1309,113 @@ export const StudentDashboard: React.FC = () => {
                 <div className="flex items-center justify-between pt-4 border-t border-slate-800">
                   <span className="text-xs text-slate-400">CIN: U62099UP2026PTC249169</span>
                   <button 
-                    onClick={() => alert('Downloading sealed PDF...')}
+                    onClick={() => setShowDraftModal(true)}
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center space-x-1.5 transition"
                   >
                     <Download className="w-4 h-4" />
                     <span>Download Sealed PDF</span>
                   </button>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* TAB 10: CONTACT US & DEMO BOOKING */}
+          {activeTab === 'contact' && (
+            <section className="space-y-6">
+              <div className="pb-6 border-b border-slate-800/80">
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className="text-xs uppercase font-bold tracking-widest text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2.5 py-0.5 rounded-full">
+                    SUPPORT & DEMO SETUP
+                  </span>
+                  <span className="text-xs text-slate-400">Sunrise Institute of Technology Support</span>
+                </div>
+                <h1 className="text-3xl font-extrabold text-white tracking-tight">Contact Us & Campus OS Demo</h1>
+                <p className="text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+                  Have questions, need a personalized demo, or want to partner with us? Our technical team is here to help you get started with CampusOS.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="lg:col-span-5 space-y-4">
+                  <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl space-y-4">
+                    <h3 className="text-base font-bold text-white">Other ways to reach us</h3>
+                    
+                    <div className="space-y-3 text-xs">
+                      <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-start space-x-3">
+                        <Mail className="w-4 h-4 text-indigo-400 mt-0.5" />
+                        <div>
+                          <span className="font-bold text-white">Email</span>
+                          <p className="text-slate-300 font-mono text-[11px]">support@aivicampus.com</p>
+                          <p className="text-slate-500 text-[10px]">Drop us an email anytime.</p>
+                        </div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-start space-x-3">
+                        <Calendar className="w-4 h-4 text-emerald-400 mt-0.5" />
+                        <div>
+                          <span className="font-bold text-white">Schedule a Demo</span>
+                          <p className="text-slate-300 text-[11px]">Book a 20-min institutional walkthrough.</p>
+                          <p className="text-slate-500 text-[10px]">See CampusOS live in action.</p>
+                        </div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-start space-x-3">
+                        <Shield className="w-4 h-4 text-rose-400 mt-0.5" />
+                        <div>
+                          <span className="font-bold text-white">Trusted & Secure</span>
+                          <p className="text-slate-300 text-[11px]">DPDP Act 2023 aligned · sovereign AWS Mumbai.</p>
+                          <p className="text-slate-500 text-[10px]">Zero spam, demo follow-ups only.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-7">
+                  <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl space-y-4">
+                    <h3 className="text-base font-bold text-white">Send us a message</h3>
+                    <p className="text-xs text-slate-400">Tell us about your requirement and our team will get back to you.</p>
+
+                    <form 
+                      onSubmit={e => {
+                        e.preventDefault();
+                        alert('Message sent successfully! Our technical team will reach out.');
+                      }} 
+                      className="space-y-4 text-xs"
+                    >
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="block font-semibold text-slate-300">Full name *</label>
+                          <input type="text" defaultValue="Abhishek Mishra" required className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-teal-500" />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="block font-semibold text-slate-300">Designation *</label>
+                          <input type="text" defaultValue="Student Lead (CSE 2026)" required className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-teal-500" />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="block font-semibold text-slate-300">Institution name *</label>
+                          <input type="text" defaultValue="Sunrise Institute of Technology" required className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-teal-500" />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="block font-semibold text-slate-300">City *</label>
+                          <input type="text" placeholder="e.g. Lucknow, Pune, Delhi" required className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-teal-500" />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="block font-semibold text-slate-300">Message (optional)</label>
+                        <textarea rows={3} placeholder="Tell us about your query, batch size, or specific features..." className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-teal-500 resize-none" />
+                      </div>
+
+                      <button type="submit" className="w-full py-3 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 text-white font-bold text-xs shadow-lg shadow-teal-500/25 transition">
+                        Send Message
+                      </button>
+                    </form>
+                  </div>
                 </div>
               </div>
             </section>
@@ -1291,6 +1432,221 @@ export const StudentDashboard: React.FC = () => {
         </footer>
 
       </main>
+
+      {/* ======================================================== */}
+      {/* MODAL: RESUME AUDIT FORENSIC REPORT                      */}
+      {/* ======================================================== */}
+      {selectedAudit && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl max-w-xl w-full space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div>
+                <h3 className="text-base font-bold text-white">{selectedAudit.name}</h3>
+                <p className="text-xs text-emerald-400">AES Index: {selectedAudit.tier} ({selectedAudit.score}/100)</p>
+              </div>
+              <button onClick={() => setSelectedAudit(null)} className="p-1 rounded-lg text-slate-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
+                <div className="flex justify-between font-semibold">
+                  <span>ATS Compatibility Score</span>
+                  <span className="text-emerald-400">98% Passed</span>
+                </div>
+                <div className="w-full bg-slate-800 h-1.5 rounded-full">
+                  <div className="bg-emerald-500 h-1.5 rounded-full" style={{ width: '98%' }}></div>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
+                <div className="flex justify-between font-semibold">
+                  <span>Keyword Density & Technical Depth</span>
+                  <span className="text-indigo-400">86% Strong</span>
+                </div>
+                <div className="w-full bg-slate-800 h-1.5 rounded-full">
+                  <div className="bg-indigo-500 h-1.5 rounded-full" style={{ width: '86%' }}></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <button onClick={() => setSelectedAudit(null)} className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold">
+                Close Report
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* MODAL: LIVE VOICE SIMULATION OVERLAY                     */}
+      {/* ======================================================== */}
+      {showVoiceModal && (
+        <div className="fixed inset-0 bg-slate-950/90 backdrop-blur-lg z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-violet-500/40 p-8 rounded-3xl max-w-2xl w-full space-y-6 text-center">
+            <div className="flex justify-between items-center pb-2 border-b border-slate-800">
+              <div className="text-left">
+                <span className="text-xs font-bold text-violet-400 uppercase tracking-widest">LIVE SARVAM AI INTERVIEW TELEMETRY</span>
+                <h3 className="text-lg font-bold text-white">Full-Duplex Speech Studio</h3>
+              </div>
+              <button onClick={() => setShowVoiceModal(false)} className="p-1.5 rounded-lg text-slate-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="py-6 flex flex-col items-center justify-center">
+              <div className="w-36 h-36 rounded-full bg-slate-950 border-2 border-violet-500 flex items-center justify-center shadow-2xl relative">
+                <div className="flex items-center space-x-1.5">
+                  <div className="w-2 bg-violet-400 rounded-full h-8 animate-pulse"></div>
+                  <div className="w-2 bg-rose-400 rounded-full h-12 animate-pulse"></div>
+                  <div className="w-2 bg-cyan-400 rounded-full h-6 animate-pulse"></div>
+                  <div className="w-2 bg-amber-400 rounded-full h-10 animate-pulse"></div>
+                </div>
+              </div>
+              <p className="text-xs text-emerald-400 font-semibold mt-4 flex items-center space-x-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>Microphone Live · Conversational Stream Connected</span>
+              </p>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 text-left">
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="text-[10px] text-slate-400">Speech Pace</span>
+                <p className="text-base font-bold text-white">138 WPM</p>
+                <span className="text-[9px] text-emerald-400">Optimal Pace</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="text-[10px] text-slate-400">Filler Words</span>
+                <p className="text-base font-bold text-white">0 Detected</p>
+                <span className="text-[9px] text-emerald-400">Clean Clarity</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                <span className="text-[10px] text-slate-400">STAR Adherence</span>
+                <p className="text-base font-bold text-indigo-400">94% Score</p>
+                <span className="text-[9px] text-indigo-400">High Rigor</span>
+              </div>
+            </div>
+
+            <div className="flex justify-center pt-2">
+              <button 
+                onClick={() => setShowVoiceModal(false)} 
+                className="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center space-x-2"
+              >
+                <MicOff className="w-4 h-4" />
+                <span>End Voice Simulation</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* MODAL: STUDENT SIGN IN (Frame 338:3062)                   */}
+      {/* ======================================================== */}
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-md w-full space-y-6">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <div className="flex items-center space-x-2">
+                <div className="w-7 h-7 rounded-lg bg-rose-500 flex items-center justify-center text-white font-bold text-xs">AM</div>
+                <span className="text-sm font-extrabold text-white">Campus<span className="text-rose-500">OS</span></span>
+              </div>
+              <button onClick={() => setShowLoginModal(false)} className="text-slate-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded">
+                #1 Student Placement Platform
+              </span>
+              <h3 className="text-xl font-bold text-white mt-2">Sign in to CampusOS</h3>
+              <p className="text-xs text-slate-400 mt-1">Welcome back! Continue your journey towards a brighter career.</p>
+            </div>
+
+            <form 
+              onSubmit={e => {
+                e.preventDefault();
+                alert('Signed in as Abhishek Mishra');
+                setShowLoginModal(false);
+              }}
+              className="space-y-3.5 text-xs"
+            >
+              <div className="space-y-1">
+                <label className="block font-semibold text-slate-300">Email address</label>
+                <input type="email" defaultValue="abhishek@aivicampus.com" required className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" />
+              </div>
+              <div className="space-y-1">
+                <label className="block font-semibold text-slate-300">Password</label>
+                <input type="password" defaultValue="••••••••••••" required className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" />
+              </div>
+              <button type="submit" className="w-full py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-indigo-600 text-white font-bold text-xs shadow-lg shadow-rose-500/25">
+                Sign In
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* MODAL: REBUILT RESUME PREVIEW                            */}
+      {/* ======================================================== */}
+      {showDraftModal && (
+        <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl max-w-2xl w-full space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div>
+                <h3 className="text-base font-bold text-white">Rebuilt Role-Tailored Resume Draft</h3>
+                <p className="text-xs text-emerald-400">100% Taleo & Workday Compliant · 1-Page Layout</p>
+              </div>
+              <button onClick={() => setShowDraftModal(false)} className="text-slate-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="bg-white text-slate-900 p-6 rounded-xl font-mono text-xs space-y-3 shadow-inner max-h-[60vh] overflow-y-auto">
+              <div className="text-center border-b pb-2 border-slate-300">
+                <h2 className="text-base font-bold tracking-tight">ABHISHEK MISHRA</h2>
+                <p className="text-[11px] text-slate-600">Lucknow, India · abhishek@aivicampus.com · linkedin.com/in/abhishekmishra-aivi · github.com/abhitriloki</p>
+              </div>
+              <div>
+                <h4 className="font-bold text-slate-800 border-b border-slate-300 pb-0.5 text-[11px]">PROFESSIONAL SUMMARY</h4>
+                <p className="text-[10px] text-slate-700 mt-1 leading-relaxed">
+                  Full-Stack Software Engineer with strong expertise in React, Next.js, Node.js, and Cloud Infrastructure. Proven track record in architecting autonomous AI routing systems.
+                </p>
+              </div>
+              <div>
+                <h4 className="font-bold text-slate-800 border-b border-slate-300 pb-0.5 text-[11px]">EDUCATION</h4>
+                <div className="flex justify-between text-[10px] text-slate-800 mt-1 font-semibold">
+                  <span>B.Tech in Computer Science and Engineering</span>
+                  <span>2022 - 2026</span>
+                </div>
+                <p className="text-[10px] text-slate-600">Sunrise Institute of Technology · CGPA: 8.8 / 10</p>
+              </div>
+              <div>
+                <h4 className="font-bold text-slate-800 border-b border-slate-300 pb-0.5 text-[11px]">TECHNICAL SKILLS</h4>
+                <p className="text-[10px] text-slate-700 mt-1 leading-relaxed">
+                  <strong>Languages:</strong> Python, TypeScript, JavaScript, SQL, Java<br />
+                  <strong>Frameworks & Cloud:</strong> React, Next.js, Tailwind CSS, Express, Docker, AWS (S3, EC2, Lambda), Redis
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+              <span className="text-xs text-slate-400">Cryptographically Sealed by Sunrise T&P Cell</span>
+              <button 
+                onClick={() => window.print()}
+                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center space-x-1.5 transition"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Download PDF</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
