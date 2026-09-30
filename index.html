@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusOS  -  TPO Command Center Suite</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#EEF5FF',
+              100: '#D9E8FF',
+              500: '#2176FF',
+              600: '#1561E6',
+              700: '#0E4DC2',
+            },
+            surface: '#F8FAFC',
+            heading: '#27282A',
+            subheading: '#7B7B7B',
+            ready: '#01B32C',
+            proficient: '#2176FF',
+            developing: '#EFB930',
+            atrisk: '#DE0000',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #F8FAFC;
+      color: #27282A;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .drawer-backdrop {
+      background-color: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(4px);
+    }
+    [v-cloak] { display: none; }
+
+    /* ========================================================= */
+    /* FIGMA PROTOTYPE MOTION & ANIMATION SYSTEM                 */
+    /* ========================================================= */
+
+    /* Tab Section Cross-Fade & Translation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in-up {
+      animation: fadeInUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Modal Scale-In Transition */
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    .animate-scale-in {
+      animation: scaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Floating / Bobbing Effect (Figma Widget 3 - 250ms ease-in-out loop) */
+    @keyframes floatSlow {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+    .animate-float-slow {
+      animation: floatSlow 3.2s ease-in-out infinite;
+    }
+
+    /* Radar Pulse for Rescue Queue & Alerts */
+    @keyframes radarPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(222, 0, 0, 0.45);
+      }
+      70% {
+        box-shadow: 0 0 0 8px rgba(222, 0, 0, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(222, 0, 0, 0);
+      }
+    }
+    .animate-radar {
+      animation: radarPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Blue Pulse for Live Voice Studio / Real-time Sandboxes */
+    @keyframes bluePulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(33, 118, 255, 0.45);
+      }
+      70% {
+        box-shadow: 0 0 0 8px rgba(33, 118, 255, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(33, 118, 255, 0);
+      }
+    }
+    .animate-blue-pulse {
+      animation: bluePulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Voice AI Equalizer Waves */
+    @keyframes waveBar {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+    .wave-bar-1 { animation: waveBar 0.75s ease-in-out infinite; }
+    .wave-bar-2 { animation: waveBar 0.75s ease-in-out 0.2s infinite; }
+    .wave-bar-3 { animation: waveBar 0.75s ease-in-out 0.4s infinite; }
+    .wave-bar-4 { animation: waveBar 0.75s ease-in-out 0.15s infinite; }
+
+    /* Student Readiness Funnel Pillar Growth (Figma Stagger: 50ms-350ms) */
+    @keyframes pillarGrow {
+      0% {
+        transform: scaleY(0.04);
+        opacity: 0.2;
+      }
+      70% {
+        transform: scaleY(1.02);
+      }
+      100% {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+    }
+    .funnel-cylinder {
+      transform-origin: bottom;
+      animation: pillarGrow 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .funnel-cylinder:hover {
+      transform: scaleY(1.02) translateY(-4px) !important;
+      box-shadow: 0 16px 28px -6px rgba(33, 118, 255, 0.35);
+    }
+
+    /* Interactive Card Hover Elevations (Figma 300ms ease-out) */
+    .interactive-card {
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .interactive-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+      border-color: #CBD5E1;
+    }
+
+    /* Interactive Button Transitions (Figma 400ms ease-in-and-out) */
+    .interactive-btn {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .interactive-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px -2px rgba(33, 118, 255, 0.3);
+    }
+    .interactive-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Table Staggered Row Entry */
+    @keyframes rowEntry {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .stagger-row {
+      animation: rowEntry 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Drawer Spring Easing */
+    #student-drawer {
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #drawer-panel {
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Circular Donut Gauge Stroke Animation */
+    #readiness-gauge-circle {
+      transition: stroke-dashoffset 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#F8FAFC] text-[#27282A] flex">
+
+  <!-- ==================== LEFT SIDEBAR NAVIGATION ==================== -->
+  <aside class="w-[270px] bg-white border-r border-slate-200/80 flex flex-col justify-between p-6 shrink-0 min-h-screen sticky top-0 h-screen overflow-y-auto custom-scrollbar z-20">
+    <div class="space-y-6">
+      <!-- Logo -->
+      <div class="flex items-center gap-2.5 px-2 cursor-pointer" onclick="switchTab('dashboard')">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#2176FF] via-[#5495FF] to-[#8A38F5] flex items-center justify-center shadow-sm shadow-blue-500/20 text-white font-bold text-lg">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.12 6.4-6.05-4.06a2 2 0 0 0-2.17-.05L2.95 8.41a2 2 0 0 0-.95 1.7v5.82a2 2 0 0 0 .88 1.66l6.05 4.07a2 2 0 0 0 2.18.05l9.93-6.13a2 2 0 0 0 .96-1.7V8.06a2 2 0 0 0-.88-1.66z"/>
+            <path d="M12 2v20"/>
+            <path d="M2.5 7.5 12 13l9.5-5.5"/>
+          </svg>
+        </div>
+        <div class="font-extrabold text-xl tracking-tight text-slate-900">
+          Campus<span class="text-[#2176FF]">OS</span>
+        </div>
+      </div>
+
+      <!-- Institutional Badge Pill -->
+      <div class="flex items-center gap-2 px-3 py-2 bg-[#EEF5FF] text-[#2176FF] rounded-xl border border-[#D9E8FF] text-xs font-semibold">
+        <i data-lucide="graduation-cap" class="w-4 h-4 shrink-0"></i>
+        <span class="truncate">Sunrise Institute Of Technology</span>
+      </div>
+
+      <!-- Navigation Menu Groups -->
+      <nav class="space-y-6 text-sm">
+        <!-- Group 1: Command -->
+        <div>
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Command</div>
+          <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition text-left bg-[#2176FF] text-white shadow-sm shadow-blue-500/25">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            <span>Dashboard</span>
+          </button>
+        </div>
+
+        <!-- Group 2: Readiness -->
+        <div class="space-y-1">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Readiness</div>
+          <button id="nav-student_roster" onclick="switchTab('student_roster')" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium transition text-left">
+            <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+            <span>Student Roaster</span>
+          </button>
+          <button id="nav-placement_drives" onclick="switchTab('placement_drives')" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium transition text-left">
+            <i data-lucide="briefcase" class="w-4 h-4 text-slate-400"></i>
+            <span>Placement Drives</span>
+          </button>
+          <button id="nav-sprints_campaigns" onclick="switchTab('sprints_campaigns')" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium transition text-left">
+            <i data-lucide="zap" class="w-4 h-4 text-slate-400"></i>
+            <span>Sprints & Campaigns</span>
+          </button>
+          <button id="nav-resume_vault" onclick="switchTab('resume_vault')" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium transition text-left">
+            <i data-lucide="folder" class="w-4 h-4 text-slate-400"></i>
+            <span>Resume Vault</span>
+          </button>
+        </div>
+
+        <!-- Group 3: AI & Insights -->
+        <div class="space-y-1">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">AI & Insights</div>
+          <button id="nav-ai_lab" onclick="switchTab('ai_lab')" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium transition text-left">
+            <i data-lucide="mic" class="w-4 h-4 text-slate-400"></i>
+            <span>AI Interview Lab</span>
+          </button>
+          <button id="nav-naac_nirf" onclick="switchTab('naac_nirf')" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium transition text-left">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>NAAC/NIRF Evidence</span>
+          </button>
+        </div>
+
+        <!-- Group 4: Operation -->
+        <div class="space-y-1">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Operation</div>
+          <button id="nav-billings" onclick="switchTab('billings')" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium transition text-left">
+            <i data-lucide="credit-card" class="w-4 h-4 text-slate-400"></i>
+            <span>Billings</span>
+          </button>
+          <button id="nav-staff_roles" onclick="switchTab('staff_roles')" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium transition text-left">
+            <i data-lucide="user-cog" class="w-4 h-4 text-slate-400"></i>
+            <span>Staff's & Roles</span>
+          </button>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Bottom User Profile Pill -->
+    <div class="pt-4 border-t border-slate-100">
+      <div class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-[#D9E8FF] shadow-sm">
+        <div class="w-10 h-10 rounded-full bg-[#2176FF] text-white flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30">
+          S
+        </div>
+        <div class="min-w-0">
+          <div class="font-bold text-sm text-slate-900 leading-tight">Sovan</div>
+          <div class="text-[11px] font-medium text-slate-400">TPO Director</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN WORKSPACE ==================== -->
+  <main class="flex-1 flex flex-col min-w-0 pb-16">
+
+    <!-- Sticky Header Bar -->
+    <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-8 flex items-center justify-between sticky top-0 z-10">
+      <!-- Search Input -->
+      <div class="w-full max-w-xl relative">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+        <input 
+          id="global-search"
+          type="text" 
+          placeholder="Search Students, drives, resume or ask CampusOS"
+          class="w-full bg-[#F1F5F9]/70 hover:bg-[#F1F5F9] focus:bg-white text-sm text-slate-800 placeholder-slate-400 pl-11 pr-4 py-2.5 rounded-full border border-transparent focus:border-[#2176FF] focus:ring-2 focus:ring-[#2176FF]/15 transition outline-none"
+        />
+      </div>
+
+      <!-- Right Header Actions -->
+      <div class="flex items-center gap-4">
+        <!-- Notification Bell -->
+        <button class="w-10 h-10 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200/60 flex items-center justify-center text-slate-600 relative transition">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+          <span class="w-2 h-2 rounded-full bg-[#DE0000] absolute top-2.5 right-2.5 ring-2 ring-white"></span>
+        </button>
+
+        <!-- Profile Pill -->
+        <div class="flex items-center gap-3 pl-2 pr-3 py-1.5 rounded-full bg-slate-50 border border-slate-200/60 hover:bg-slate-100 transition cursor-pointer">
+          <div class="w-8 h-8 rounded-full bg-[#2176FF] text-white flex items-center justify-center font-bold text-xs">
+            S
+          </div>
+          <div class="text-left">
+            <div class="text-xs font-bold text-slate-900 leading-tight">Sovan</div>
+            <div class="text-[10px] text-slate-400 leading-tight">TPO Director</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dynamic Section Container -->
+    <div class="p-8 max-w-7xl w-full mx-auto">
+
+      <!-- ======================================================== -->
+      <!-- SECTION 1: DASHBOARD (MAIN OVERVIEW)                     -->
+      <!-- ======================================================== -->
+      <div id="section-dashboard" class="space-y-8">
+        <!-- Greeting & Overall Readiness Score -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div>
+            <h1 class="text-3xl font-extrabold text-[#27282A] tracking-tight">
+              Hello <span class="text-[#27282A]">Sovan!</span>
+            </h1>
+            <h2 class="text-2xl font-bold text-[#27282A] mt-1">
+              Your Campus, Placement - Ready
+            </h2>
+            <p class="text-sm font-medium text-[#7B7B7B] mt-1.5">
+              Track Progress, run drives, and empower every student with AI
+            </p>
+          </div>
+
+          <!-- Score Card -->
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-6 min-w-[340px] interactive-card">
+            <div class="relative w-24 h-24 shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="#F1F5F9" stroke-width="10" fill="transparent" />
+                <circle id="readiness-gauge-circle" cx="50" cy="50" r="40" stroke="#2176FF" stroke-width="10" stroke-dasharray="251.2" stroke-dashoffset="42.7" stroke-linecap="round" fill="transparent" />
+              </svg>
+              <div class="absolute flex flex-col items-center justify-center text-center">
+                <span id="readiness-score-number" class="text-xl font-extrabold text-[#27282A] leading-tight">83</span>
+                <span class="text-[10px] text-slate-400 font-medium">/100</span>
+              </div>
+            </div>
+
+            <div class="flex-1 space-y-2">
+              <div class="text-xs font-bold text-[#27282A]">Overall Readiness Score</div>
+              <div class="text-[11px] font-semibold text-[#01B32C] flex items-center gap-1">
+                <span>+6.2pts</span>
+                <span class="text-slate-400 font-normal">Vs last Academic Year</span>
+              </div>
+
+              <div class="space-y-1.5 pt-1 text-[10px] text-slate-500 font-medium">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="w-12">Skills</span>
+                  <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="readiness-bar-skills" class="h-full bg-[#5495FF] rounded-full transition-all duration-700 ease-out" style="width: 82%"></div>
+                  </div>
+                  <span class="w-6 text-right font-bold text-slate-700">82%</span>
+                </div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="w-12">Resume</span>
+                  <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="readiness-bar-resume" class="h-full bg-[#7E54E0] rounded-full transition-all duration-700 ease-out" style="width: 96%"></div>
+                  </div>
+                  <span class="w-6 text-right font-bold text-slate-700">96%</span>
+                </div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="w-12">Portfolio</span>
+                  <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="readiness-bar-portfolio" class="h-full bg-[#FF9A6D] rounded-full transition-all duration-700 ease-out" style="width: 77%"></div>
+                  </div>
+                  <span class="w-6 text-right font-bold text-slate-700">77%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 KPI Metrics -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between interactive-card cursor-pointer">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-2xl bg-[#EEF5FF] text-[#2176FF] flex items-center justify-center">
+                <i data-lucide="users" class="w-5 h-5"></i>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#EEF5FF] text-[#2176FF] font-semibold text-xs border border-[#D9E8FF]">On track</span>
+            </div>
+            <div class="mt-4">
+              <div class="text-xs font-semibold text-[#7B7B7B]">Student Onboard</div>
+              <div id="kpi-students-count" class="text-3xl font-extrabold text-[#27282A] tracking-tight mt-1">2,400</div>
+              <div class="text-[11px] font-medium text-slate-400 mt-1">Out Of 2,400 enrolled</div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between interactive-card cursor-pointer">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-2xl bg-[#EEF5FF] text-[#2176FF] flex items-center justify-center">
+                <i data-lucide="file-text" class="w-5 h-5"></i>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#EEF5FF] text-[#2176FF] font-semibold text-xs border border-[#D9E8FF]">75% analyzed</span>
+            </div>
+            <div class="mt-4">
+              <div class="text-xs font-semibold text-[#7B7B7B]">Resumes Analyzed</div>
+              <div id="kpi-resumes-count" class="text-3xl font-extrabold text-[#27282A] tracking-tight mt-1">75%</div>
+              <div class="text-[11px] font-medium text-slate-400 mt-1">6 ATS & JD-fit complete · 3 verified</div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between interactive-card cursor-pointer">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-2xl bg-[#FFF6E9] text-[#EFB930] flex items-center justify-center">
+                <i data-lucide="briefcase" class="w-5 h-5 text-[#EFB930]"></i>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#FFF6E9] text-[#E08A00] font-semibold text-xs border border-[#FFE8C2]">3 live</span>
+            </div>
+            <div class="mt-4">
+              <div class="text-xs font-semibold text-[#7B7B7B]">Active drives</div>
+              <div id="kpi-drives-count" class="text-3xl font-extrabold text-[#27282A] tracking-tight mt-1">3</div>
+              <div class="text-[11px] font-medium text-slate-400 mt-1">Corporate pipelines live</div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between interactive-card cursor-pointer">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-2xl bg-[#FFF0F0] text-[#DE0000] flex items-center justify-center">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-[#DE0000]"></i>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#FFF0F0] text-[#DE0000] font-semibold text-xs border border-[#FFD6D6]">2 at risk</span>
+            </div>
+            <div class="mt-4">
+              <div class="text-xs font-semibold text-[#7B7B7B]">At-risk students</div>
+              <div id="kpi-risk-count" class="text-3xl font-extrabold text-[#27282A] tracking-tight mt-1">2</div>
+              <div class="text-[11px] font-medium text-slate-400 mt-1">At-risk students</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mid-Row: AES Distribution & Rescue Queue -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between interactive-card">
+            <div>
+              <h3 class="text-lg font-bold text-[#27282A]">AES Distribution</h3>
+              <p class="text-xs text-[#7B7B7B] mt-0.5">See where your students stand and where invention is needed</p>
+            </div>
+            <div class="mt-6 space-y-4">
+              <div class="flex items-center justify-between text-xs font-bold">
+                <span class="text-slate-800">Readiness Distribution (AES)</span>
+                <span class="text-slate-500 font-semibold">240 Students</span>
+              </div>
+              <div class="h-6 w-full rounded-xl bg-slate-100 flex overflow-hidden p-0.5 gap-1 shadow-inner">
+                <div class="h-full bg-[#01B32C] rounded-lg transition-all duration-1000" style="width: 35%"></div>
+                <div class="h-full bg-[#2176FF] rounded-lg transition-all duration-1000" style="width: 25%"></div>
+                <div class="h-full bg-[#EFB930] rounded-lg transition-all duration-1000" style="width: 15%"></div>
+                <div class="h-full bg-[#DE0000] rounded-lg transition-all duration-1000" style="width: 5%"></div>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#01B32C]"></span>
+                  <div><span class="font-bold text-slate-900">35%</span><div class="text-[11px] text-[#7B7B7B]">Industry Ready</div></div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#2176FF]"></span>
+                  <div><span class="font-bold text-slate-900">25%</span><div class="text-[11px] text-[#7B7B7B]">Proficient</div></div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#EFB930]"></span>
+                  <div><span class="font-bold text-slate-900">15%</span><div class="text-[11px] text-[#7B7B7B]">Developing</div></div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#DE0000]"></span>
+                  <div><span class="font-bold text-slate-900">5%</span><div class="text-[11px] text-[#7B7B7B]">At Risk</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between interactive-card">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-bold text-[#27282A]">Rescue queue</h3>
+              <button onclick="switchTab('student_roster')" class="text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition interactive-btn">Open Full Roaster</button>
+            </div>
+            <div class="my-6">
+              <div class="flex items-center justify-between cursor-pointer p-3 rounded-2xl hover:bg-slate-50 transition" onclick="openStudentDrawer('Karan Johar', 'SIT2026007', 'CSE', '2026', 38, 'At Risk', '12d ago', 'Needs Attention')">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-full bg-[#FFA4A4] text-white flex items-center justify-center font-bold text-sm shadow-sm">KJ</div>
+                  <div>
+                    <div class="text-sm font-bold text-[#27282A]">Karan Johar</div>
+                    <div class="text-xs text-[#7B7B7B]">SIT2026007 · CSE · 12d ago</div>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-full bg-[#FFF0F0] text-[#DE0000] font-bold text-xs border border-[#FFD6D6] animate-radar">38 AES</span>
+              </div>
+            </div>
+            <button id="nudge-btn" onclick="triggerNudge(this)" class="w-full py-2.5 px-4 rounded-xl bg-[#EEF5FF] hover:bg-[#D9E8FF] text-[#2176FF] font-bold text-xs flex items-center justify-center gap-1.5 transition interactive-btn">
+              <span>Nudge</span>
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Student Readiness Funnel -->
+        <div class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm interactive-card">
+          <div class="mb-8 flex items-center justify-between">
+            <div>
+              <h3 class="text-xl font-bold text-[#27282A]">Student Readiness Funnel</h3>
+              <p class="text-xs font-medium text-[#7B7B7B] mt-0.5">Batch 2026 · where students drop between consent and offer</p>
+            </div>
+            <span class="text-xs font-semibold px-3 py-1 bg-slate-100 text-slate-600 rounded-full">Interactive Pillars</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-end pt-4 pb-2">
+            <div class="flex flex-col items-center group">
+              <div class="funnel-cylinder w-full max-w-[86px] h-48 bg-gradient-to-b from-[#6FA6FF] to-[#5495FF] rounded-3xl relative shadow-md shadow-blue-400/20 flex flex-col justify-start items-center pt-2 cursor-pointer" style="animation-delay: 0ms;" title="Consent collected: 100%">
+                <div class="w-3.5 h-3.5 rounded-full bg-white/95 shadow-sm group-hover:scale-125 transition-transform duration-200"></div>
+              </div>
+              <div class="text-center mt-3"><div class="text-[11px] font-medium text-slate-500">Consent collected</div><div class="text-xs font-extrabold text-slate-900 mt-1">100%</div></div>
+            </div>
+            <div class="flex flex-col items-center group">
+              <div class="funnel-cylinder w-full max-w-[86px] h-44 bg-gradient-to-b from-[#9470EB] to-[#7E54E0] rounded-3xl relative shadow-md shadow-purple-500/20 flex flex-col justify-start items-center pt-2 cursor-pointer" style="animation-delay: 80ms;" title="First AI analysis: 92%">
+                <div class="w-3.5 h-3.5 rounded-full bg-white/95 shadow-sm group-hover:scale-125 transition-transform duration-200"></div>
+              </div>
+              <div class="text-center mt-3"><div class="text-[11px] font-medium text-slate-500">First AI analysis</div><div class="text-xs font-extrabold text-slate-900 mt-1">92%</div></div>
+            </div>
+            <div class="flex flex-col items-center group">
+              <div class="funnel-cylinder w-full max-w-[86px] h-40 bg-gradient-to-b from-[#F26BBF] to-[#E054AA] rounded-3xl relative shadow-md shadow-pink-500/20 flex flex-col justify-start items-center pt-2 cursor-pointer" style="animation-delay: 160ms;" title="Resume rebuilt: 87%">
+                <div class="w-3.5 h-3.5 rounded-full bg-white/95 shadow-sm group-hover:scale-125 transition-transform duration-200"></div>
+              </div>
+              <div class="text-center mt-3"><div class="text-[11px] font-medium text-slate-500">Resume rebuilt</div><div class="text-xs font-extrabold text-slate-900 mt-1">87%</div></div>
+            </div>
+            <div class="flex flex-col items-center group">
+              <div class="funnel-cylinder w-full max-w-[86px] h-32 bg-gradient-to-b from-[#EB6F71] to-[#E05658] rounded-3xl relative shadow-md shadow-rose-500/20 flex flex-col justify-start items-center pt-2 cursor-pointer" style="animation-delay: 240ms;" title="Mock interview done: 70%">
+                <div class="w-3.5 h-3.5 rounded-full bg-white/95 shadow-sm group-hover:scale-125 transition-transform duration-200"></div>
+              </div>
+              <div class="text-center mt-3"><div class="text-[11px] font-medium text-slate-500">Mock interview done</div><div class="text-xs font-extrabold text-slate-900 mt-1">70%</div></div>
+            </div>
+            <div class="flex flex-col items-center group">
+              <div class="funnel-cylinder w-full max-w-[86px] h-36 bg-gradient-to-b from-[#5EE319] to-[#45CE01] rounded-3xl relative shadow-md shadow-green-500/20 flex flex-col justify-start items-center pt-2 cursor-pointer" style="animation-delay: 320ms;" title="Resume verified: 78%">
+                <div class="w-3.5 h-3.5 rounded-full bg-white/95 shadow-sm group-hover:scale-125 transition-transform duration-200"></div>
+              </div>
+              <div class="text-center mt-3"><div class="text-[11px] font-medium text-slate-500">Resume verified</div><div class="text-xs font-extrabold text-slate-900 mt-1">78%</div></div>
+            </div>
+            <div class="flex flex-col items-center group">
+              <div class="funnel-cylinder w-full max-w-[86px] h-36 bg-gradient-to-b from-[#FFCC4D] to-[#EFB930] rounded-3xl relative shadow-md shadow-amber-500/20 flex flex-col justify-start items-center pt-2 cursor-pointer" style="animation-delay: 400ms;" title="Offered: 78%">
+                <div class="w-3.5 h-3.5 rounded-full bg-white/95 shadow-sm group-hover:scale-125 transition-transform duration-200"></div>
+              </div>
+              <div class="text-center mt-3"><div class="text-[11px] font-medium text-slate-500">Offered</div><div class="text-xs font-extrabold text-slate-900 mt-1">78%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SECTION 2: STUDENT ROSTER (ONE SEARCH AWAY)              -->
+      <!-- ======================================================== -->
+      <div id="section-student_roster" class="space-y-6 hidden">
+        <!-- Top Banner Header -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-extrabold text-[#27282A] tracking-tight">All Students, One Search away</h1>
+            <p class="text-sm font-medium text-[#7B7B7B] mt-1">Manage enrolled students, academic tracking and placement readiness</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <select class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+              <option>📅 AY 2025–26</option>
+              <option>📅 AY 2024–25</option>
+            </select>
+            <button onclick="exportCSV()" class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center gap-2 transition">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Export CSV</span>
+            </button>
+            <button onclick="openModal('modal-import-students')" class="px-4 py-2.5 rounded-xl bg-[#2176FF] hover:bg-[#1561E6] text-white text-xs font-bold flex items-center gap-2 shadow-sm shadow-blue-500/25 transition">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Import Students</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="bg-white rounded-2xl p-3 border border-slate-200/80 shadow-sm flex flex-wrap items-center gap-3">
+          <div class="flex-1 min-w-[240px] relative">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input 
+              id="roster-search"
+              oninput="filterRoster()"
+              type="text" 
+              placeholder="Search Name, Enrollment Number...." 
+              class="w-full bg-slate-50 text-xs text-slate-800 placeholder-slate-400 pl-9 pr-3 py-2 rounded-xl border border-slate-200/60 focus:bg-white focus:border-[#2176FF] outline-none"
+            />
+          </div>
+          <select id="roster-branch-filter" onchange="filterRoster()" class="px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-700 font-semibold outline-none cursor-pointer">
+            <option value="ALL">Branch: All</option>
+            <option value="CSE">CSE</option>
+            <option value="IT">IT</option>
+            <option value="ECE">ECE</option>
+            <option value="Mechanical">Mechanical</option>
+          </select>
+          <select id="roster-readiness-filter" onchange="filterRoster()" class="px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-700 font-semibold outline-none cursor-pointer">
+            <option value="ALL">Readiness: All</option>
+            <option value="Industry Ready">Industry Ready</option>
+            <option value="Proficient">Proficient</option>
+            <option value="Developing">Developing</option>
+            <option value="At Risk">At Risk</option>
+          </select>
+          <select id="roster-status-filter" onchange="filterRoster()" class="px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-700 font-semibold outline-none cursor-pointer">
+            <option value="ALL">Placement Status: All</option>
+            <option value="Interview Ready">Interview Ready</option>
+            <option value="Placed">Placed</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Not Started">Not Started</option>
+          </select>
+        </div>
+
+        <!-- Student Roster Table Card -->
+        <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-[#27282A]">Student Roster</h3>
+              <p class="text-xs text-[#7B7B7B]">View student readiness, activity, and placement status. Click any row to view slide-bar intelligence.</p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EEF5FF] text-[#2176FF] font-semibold text-xs border border-[#D9E8FF]">
+              <span class="w-2 h-2 rounded-full bg-[#2176FF]"></span>
+              2,400 students
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <tr>
+                  <th scope="col" class="py-4 px-6">STUDENT</th>
+                  <th scope="col" class="py-4 px-4">ENROLLMENT NO.</th>
+                  <th scope="col" class="py-4 px-4">BRANCH</th>
+                  <th scope="col" class="py-4 px-4">BATCH</th>
+                  <th scope="col" class="py-4 px-4">AES SCORE</th>
+                  <th scope="col" class="py-4 px-4">READINESS</th>
+                  <th scope="col" class="py-4 px-4">LAST ACTIVE</th>
+                  <th scope="col" class="py-4 px-4">PLACEMENT STATUS</th>
+                  <th scope="col" class="py-4 px-6 text-right">ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="roster-tbody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                <!-- Injected via JavaScript with click handler to open drawer -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-slate-500">
+            <div>Showing <span class="font-bold text-slate-800">1-8</span> of <span class="font-bold text-slate-800">2,400</span> students</div>
+            <div class="flex items-center gap-1.5">
+              <button class="w-8 h-8 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+              <button class="w-8 h-8 rounded-xl bg-[#2176FF] text-white font-bold flex items-center justify-center shadow-sm shadow-blue-500/20">1</button>
+              <button class="w-8 h-8 rounded-xl border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 flex items-center justify-center transition">2</button>
+              <button class="w-8 h-8 rounded-xl border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 flex items-center justify-center transition">3</button>
+              <span class="px-1 text-slate-400">...</span>
+              <button class="w-8 h-8 rounded-xl border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 flex items-center justify-center transition">300</button>
+              <button class="w-8 h-8 rounded-xl border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SECTION 3: PLACEMENT DRIVES                              -->
+      <!-- ======================================================== -->
+      <div id="section-placement_drives" class="space-y-6 hidden">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-extrabold text-[#27282A] tracking-tight">Placement Drives & AI Prep Sprints</h1>
+            <p class="text-sm font-medium text-[#7B7B7B] mt-1">Manage corporate recruitment visits, auto-shortlisting, and targeted student prep</p>
+          </div>
+          <button onclick="openModal('modal-create-drive')" class="px-5 py-2.5 rounded-xl bg-[#2176FF] hover:bg-[#1561E6] text-white text-xs font-bold flex items-center gap-2 shadow-sm shadow-blue-500/25 transition">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Create a Campus Drive</span>
+          </button>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-[#27282A]">Student Roster</h3>
+              <p class="text-xs text-[#7B7B7B]">Drive eligibility verification, CTC proposals, and offer management</p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EEF5FF] text-[#2176FF] font-semibold text-xs border border-[#D9E8FF]">
+              <span class="w-2 h-2 rounded-full bg-[#2176FF]"></span>
+              2,400 students
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <tr>
+                  <th scope="col" class="py-4 px-6">STUDENT</th>
+                  <th scope="col" class="py-4 px-4">ENROLLMENT NO.</th>
+                  <th scope="col" class="py-4 px-4">BRANCH</th>
+                  <th scope="col" class="py-4 px-4">CGPA</th>
+                  <th scope="col" class="py-4 px-4">ELIGIBILITY</th>
+                  <th scope="col" class="py-4 px-4">OUTCOME</th>
+                  <th scope="col" class="py-4 px-4">PACKAGE (LPA)</th>
+                  <th scope="col" class="py-4 px-6 text-right">ACTION</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#D9E8FF] text-[#2176FF] flex items-center justify-center font-bold text-xs">AS</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Aditya Sharma</div><div class="text-[11px] text-slate-400">CSE25-1048</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">CSE25-1048</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-lg bg-slate-100 font-semibold">CSE</span></td>
+                  <td class="py-4 px-4 font-bold text-slate-800">8.8</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Eligible</span></td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#01B32C] text-white font-bold">Offered</span></td>
+                  <td class="py-4 px-4 font-extrabold text-[#01B32C]">₹8.5 LPA</td>
+                  <td class="py-4 px-6 text-right space-x-2">
+                    <button class="px-3 py-1 rounded-lg bg-[#E6F8EB] text-[#01B32C] font-bold text-[11px] hover:bg-[#c2f2cc] transition">✓ Offer</button>
+                    <button class="px-3 py-1 rounded-lg bg-[#FFF0F0] text-[#DE0000] font-bold text-[11px] hover:bg-[#ffd6d6] transition">✕ Reject</button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#D9E8FF] text-[#2176FF] flex items-center justify-center font-bold text-xs">RM</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Rohan Mehta</div><div class="text-[11px] text-slate-400">CSE25-1182</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">CSE25-1048</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-lg bg-slate-100 font-semibold">CSE</span></td>
+                  <td class="py-4 px-4 font-bold text-slate-800">9.1</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Eligible</span></td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#01B32C] text-white font-bold">Offered</span></td>
+                  <td class="py-4 px-4 font-extrabold text-[#01B32C]">₹8.5 LPA</td>
+                  <td class="py-4 px-6 text-right space-x-2">
+                    <button class="px-3 py-1 rounded-lg bg-[#E6F8EB] text-[#01B32C] font-bold text-[11px] hover:bg-[#c2f2cc] transition">✓ Offer</button>
+                    <button class="px-3 py-1 rounded-lg bg-[#FFF0F0] text-[#DE0000] font-bold text-[11px] hover:bg-[#ffd6d6] transition">✕ Reject</button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#EEF5FF] text-[#2176FF] flex items-center justify-center font-bold text-xs">PV</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Priya Verma</div><div class="text-[11px] text-slate-400">ECE25-0874</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">ECE25-0874</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-lg bg-slate-100 font-semibold">ECE</span></td>
+                  <td class="py-4 px-4 font-bold text-slate-800">8.2</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Eligible</span></td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-white text-[#01B32C] border border-[#01B32C] font-bold">Selected</span></td>
+                  <td class="py-4 px-4 text-slate-400"> - </td>
+                  <td class="py-4 px-6 text-right space-x-2">
+                    <button class="px-3 py-1 rounded-lg bg-[#E6F8EB] text-[#01B32C] font-bold text-[11px] hover:bg-[#c2f2cc] transition">✓ Offer</button>
+                    <button class="px-3 py-1 rounded-lg bg-[#FFF0F0] text-[#DE0000] font-bold text-[11px] hover:bg-[#ffd6d6] transition">✕ Reject</button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#F3E8FF] text-[#9333EA] flex items-center justify-center font-bold text-xs">AR</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Arjun Rao</div><div class="text-[11px] text-slate-400">CSE25-1264</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">CSE25-1264</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-lg bg-slate-100 font-semibold">CSE</span></td>
+                  <td class="py-4 px-4 font-bold text-slate-800">7.8</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Eligible</span></td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-white text-[#EFB930] border border-[#EFB930] font-bold">Pending</span></td>
+                  <td class="py-4 px-4 text-slate-400"> - </td>
+                  <td class="py-4 px-6 text-right space-x-2">
+                    <button class="px-3 py-1 rounded-lg bg-[#E6F8EB] text-[#01B32C] font-bold text-[11px] hover:bg-[#c2f2cc] transition">✓ Offer</button>
+                    <button class="px-3 py-1 rounded-lg bg-[#FFF0F0] text-[#DE0000] font-bold text-[11px] hover:bg-[#ffd6d6] transition">✕ Reject</button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#FFF0F0] text-[#DE0000] flex items-center justify-center font-bold text-xs">VN</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Vivek Nair</div><div class="text-[11px] text-slate-400">ME25-0559</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">ME25-0559</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-lg bg-slate-100 font-semibold">Mechanical</span></td>
+                  <td class="py-4 px-4 font-bold text-slate-800">8.0</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#FFF0F0] text-[#DE0000] font-semibold border border-[#FFD6D6]">Not Eligible</span></td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-white text-[#DE0000] border border-[#DE0000] font-bold">Rejected</span></td>
+                  <td class="py-4 px-4 text-slate-400"> - </td>
+                  <td class="py-4 px-6 text-right space-x-2">
+                    <button class="px-3 py-1 rounded-lg bg-[#E6F8EB] text-[#01B32C] font-bold text-[11px] hover:bg-[#c2f2cc] transition">✓ Offer</button>
+                    <button class="px-3 py-1 rounded-lg bg-[#FFF0F0] text-[#DE0000] font-bold text-[11px] hover:bg-[#ffd6d6] transition">✕ Reject</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SECTION 4: SPRINTS & CAMPAIGNS                           -->
+      <!-- ======================================================== -->
+      <div id="section-sprints_campaigns" class="space-y-6 hidden">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-extrabold text-[#27282A] tracking-tight">Sprints & Placement Campaigns</h1>
+            <p class="text-sm font-medium text-[#7B7B7B] mt-1">7-Day intensive AI skill sprints aligned with company-specific hiring patterns.</p>
+          </div>
+          <button onclick="openModal('modal-create-sprint')" class="px-5 py-2.5 rounded-xl bg-[#2176FF] hover:bg-[#1561E6] text-white text-xs font-bold flex items-center gap-2 shadow-sm shadow-blue-500/25 transition">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Launch New AI Sprint</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Card 1: TCS -->
+          <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div>
+              <div class="h-10 flex items-center">
+                <span class="text-2xl font-black tracking-tighter text-[#E054AA]">tcs</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 mt-4">TCS Digital 7-Day Intensive Sprint</h3>
+              <p class="text-xs text-slate-400 mt-1">Target Batch: 2026 | Enrolled: 142 Students</p>
+              
+              <div class="mt-4 pt-4 border-t border-slate-100">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">PACKAGE</div>
+                <div class="text-2xl font-extrabold text-slate-900 mt-0.5">₹7.5 LPA</div>
+              </div>
+
+              <div class="flex items-center gap-4 text-xs text-slate-500 mt-4">
+                <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i> Batch 2026</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="users" class="w-3.5 h-3.5 text-slate-400"></i> 142 Enrolled</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i> 7 Days Left</span>
+              </div>
+
+              <div class="h-2 w-full bg-slate-100 rounded-full mt-5 overflow-hidden">
+                <div class="h-full bg-[#2176FF] rounded-full" style="width: 70%"></div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-5 mt-4 border-t border-slate-100 text-xs">
+              <span class="font-bold text-slate-700 flex items-center gap-1.5"><i data-lucide="user-check" class="w-3.5 h-3.5 text-[#01B32C]"></i> 98 Students Ready</span>
+              <a href="#" class="font-bold text-[#2176FF] hover:underline flex items-center gap-1">View Campaign →</a>
+            </div>
+          </div>
+
+          <!-- Card 2: Infosys -->
+          <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div>
+              <div class="h-10 flex items-center">
+                <span class="text-2xl font-bold tracking-tight text-[#007CC3]">Infosys</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 mt-4">Infosys HackWithInfy Coding Bootcamp</h3>
+              <p class="text-xs text-slate-400 mt-1">Focus: DSA, System Design, Communication</p>
+              
+              <div class="mt-4 pt-4 border-t border-slate-100">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">PACKAGE</div>
+                <div class="text-2xl font-extrabold text-slate-900 mt-0.5">₹7.5 LPA</div>
+              </div>
+
+              <div class="flex items-center gap-4 text-xs text-slate-500 mt-4">
+                <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i> Batch 2026</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="users" class="w-3.5 h-3.5 text-slate-400"></i> 112 Enrolled</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i> 7 Days Left</span>
+              </div>
+
+              <div class="h-2 w-full bg-slate-100 rounded-full mt-5 overflow-hidden">
+                <div class="h-full bg-[#2176FF] rounded-full" style="width: 85%"></div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-5 mt-4 border-t border-slate-100 text-xs">
+              <span class="font-bold text-slate-700 flex items-center gap-1.5"><i data-lucide="user-check" class="w-3.5 h-3.5 text-[#01B32C]"></i> 98 Students Ready</span>
+              <a href="#" class="font-bold text-[#2176FF] hover:underline flex items-center gap-1">View Campaign →</a>
+            </div>
+          </div>
+
+          <!-- Card 3: AWS -->
+          <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div>
+              <div class="h-10 flex items-center">
+                <span class="text-2xl font-bold tracking-tight text-[#FF9900]">aws</span>
+              </div>
+              <h3 class="text-base font-bold text-slate-900 mt-4">Amazon AWS SDE System Design Sprint</h3>
+              <p class="text-xs text-slate-400 mt-1">Focus: Cloud System Design, Case Study</p>
+              
+              <div class="mt-4 pt-4 border-t border-slate-100">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">PACKAGE</div>
+                <div class="text-2xl font-extrabold text-slate-900 mt-0.5">₹7.5 LPA</div>
+              </div>
+
+              <div class="flex items-center gap-4 text-xs text-slate-500 mt-4">
+                <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i> Batch 2026</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="users" class="w-3.5 h-3.5 text-slate-400"></i> 142 Enrolled</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i> 7 Days Left</span>
+              </div>
+
+              <div class="h-2 w-full bg-slate-100 rounded-full mt-5 overflow-hidden">
+                <div class="h-full bg-[#2176FF] rounded-full" style="width: 45%"></div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-5 mt-4 border-t border-slate-100 text-xs">
+              <span class="font-bold text-slate-700 flex items-center gap-1.5"><i data-lucide="user-check" class="w-3.5 h-3.5 text-[#01B32C]"></i> 98 Students Ready</span>
+              <a href="#" class="font-bold text-[#2176FF] hover:underline flex items-center gap-1">View Campaign →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SECTION 5: RESUME VAULT                                  -->
+      <!-- ======================================================== -->
+      <div id="section-resume_vault" class="space-y-6 hidden">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-extrabold text-[#27282A] tracking-tight">Resume Vaults</h1>
+            <p class="text-sm font-medium text-[#7B7B7B] mt-1">University-sealed, QR-verifiable student resumes & recruiter ZIP exporter</p>
+          </div>
+          <button onclick="exportRecruiterPackage()" class="px-5 py-2.5 rounded-xl bg-[#2176FF] hover:bg-[#1561E6] text-white text-xs font-bold flex items-center gap-2 shadow-sm shadow-blue-500/25 transition">
+            <i data-lucide="upload" class="w-4 h-4"></i>
+            <span>Export Recruiter Package</span>
+          </button>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div class="p-6 border-b border-slate-100">
+            <h3 class="text-lg font-bold text-[#27282A]">Verification Review Queue (7)</h3>
+            <p class="text-xs text-[#7B7B7B]">Submitted student resumes pending seal verification.</p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <tr>
+                  <th scope="col" class="py-4 px-6">STUDENT</th>
+                  <th scope="col" class="py-4 px-4">ENROLLMENT NO.</th>
+                  <th scope="col" class="py-4 px-4">BRANCH</th>
+                  <th scope="col" class="py-4 px-4">VERSION</th>
+                  <th scope="col" class="py-4 px-4">STATUS</th>
+                  <th scope="col" class="py-4 px-6 text-right">ACTION</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#D9E8FF] text-[#2176FF] flex items-center justify-center font-bold text-xs">AS</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Aditya Sharma</div><div class="text-[11px] text-slate-400">CSE25-1048</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">CSE25-1048</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-lg bg-slate-100 font-semibold">CSE</span></td>
+                  <td class="py-4 px-4 text-slate-600">v1.0</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#FFF6E9] text-[#E08A00] font-semibold border border-[#FFE8C2]">Submitted</span></td>
+                  <td class="py-4 px-6 text-right">
+                    <button onclick="previewResume('Aditya Sharma')" class="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition flex items-center gap-1.5 ml-auto">
+                      <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                      <span>PREVIEW</span>
+                    </button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#D9E8FF] text-[#2176FF] flex items-center justify-center font-bold text-xs">RM</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Rohan Mehta</div><div class="text-[11px] text-slate-400">CSE25-1182</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">CSE25-1048</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-lg bg-slate-100 font-semibold">CSE</span></td>
+                  <td class="py-4 px-4 text-slate-600">v1.0</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#FFF6E9] text-[#E08A00] font-semibold border border-[#FFE8C2]">Submitted</span></td>
+                  <td class="py-4 px-6 text-right">
+                    <button onclick="previewResume('Rohan Mehta')" class="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition flex items-center gap-1.5 ml-auto">
+                      <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                      <span>PREVIEW</span>
+                    </button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#EEF5FF] text-[#2176FF] flex items-center justify-center font-bold text-xs">PV</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Priya Verma</div><div class="text-[11px] text-slate-400">ECE25-0874</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">ECE25-0874</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-lg bg-slate-100 font-semibold">ECE</span></td>
+                  <td class="py-4 px-4 text-slate-600">v1.0</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Verified & Sealed</span></td>
+                  <td class="py-4 px-6 text-right">
+                    <button onclick="previewResume('Priya Verma')" class="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition flex items-center gap-1.5 ml-auto">
+                      <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                      <span>PREVIEW</span>
+                    </button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#DCFCE7] text-[#16A34A] flex items-center justify-center font-bold text-xs">NP</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Neha Patel</div><div class="text-[11px] text-slate-400">IT24-0935</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">IT24-0935</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-lg bg-slate-100 font-semibold">IT</span></td>
+                  <td class="py-4 px-4 text-slate-600">v1.0</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Verified & Sealed</span></td>
+                  <td class="py-4 px-6 text-right">
+                    <button onclick="previewResume('Neha Patel')" class="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition flex items-center gap-1.5 ml-auto">
+                      <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                      <span>PREVIEW</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SECTION 6: AI INTERVIEW LAB                              -->
+      <!-- ======================================================== -->
+      <div id="section-ai_lab" class="space-y-6 hidden">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-extrabold text-[#27282A] tracking-tight">AI Mock Interview Oversight & Diagnostic Hub</h1>
+            <p class="text-sm font-medium text-[#7B7B7B] mt-1">Real-time audit log of student voice mock interviews, Gemini 2.0 forensic evaluations, and batch hiring readiness.</p>
+          </div>
+          <button onclick="alert('Opening live Sarvam AI telemetry console...')" class="px-5 py-2.5 rounded-xl bg-[#2176FF] hover:bg-[#1561E6] text-white text-xs font-bold flex items-center gap-2.5 shadow-sm shadow-blue-500/25 transition interactive-btn">
+            <span class="flex items-end gap-0.5 h-4 w-4">
+              <span class="w-1 bg-white rounded-full wave-bar-1"></span>
+              <span class="w-1 bg-white rounded-full wave-bar-2"></span>
+              <span class="w-1 bg-white rounded-full wave-bar-3"></span>
+              <span class="w-1 bg-white rounded-full wave-bar-4"></span>
+            </span>
+            <span>Preview Live Voice Studio</span>
+          </button>
+        </div>
+
+        <!-- 4 Diagnostic Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4 interactive-card">
+            <div class="w-12 h-12 rounded-2xl bg-[#EEF5FF] text-[#2176FF] flex items-center justify-center shrink-0">
+              <i data-lucide="mic" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-[#7B7B7B]">Mocks Completed</div>
+              <div class="text-2xl font-extrabold text-slate-900">240</div>
+              <div class="text-[10px] text-slate-400">Vs Last week(Active Placement Drive)</div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-[#F5F0FF] text-[#7E54E0] flex items-center justify-center shrink-0">
+              <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-[#7B7B7B]">Avg Technical Score</div>
+              <div class="text-2xl font-extrabold text-slate-900">78.4/100</div>
+              <div class="text-[10px] text-slate-400">CSE: 84% • ECE: 76% • ME: 72%</div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-[#E6F8EB] text-[#01B32C] flex items-center justify-center shrink-0">
+              <i data-lucide="star" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-[#7B7B7B]">STAR Behavioral Avg</div>
+              <div class="text-2xl font-extrabold text-slate-900">82.1%</div>
+              <div class="text-[10px] text-slate-400">Hinglish to English transition: 91%</div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-[#FFF6E9] text-[#EFB930] flex items-center justify-center shrink-0">
+              <i data-lucide="users" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-[#7B7B7B]">Speech Fluency WPM</div>
+              <div class="text-2xl font-extrabold text-slate-900">128 WPM</div>
+              <div class="text-[10px] text-slate-400">Industry standard: 110–140 WPM</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Mock Logs Table -->
+        <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div class="p-6 border-b border-slate-100">
+            <h3 class="text-lg font-bold text-[#27282A]">Student Mock Interview Logs (6)</h3>
+            <p class="text-xs text-[#7B7B7B]">Audit individual candidate speech telemetry, technical depth, and forensic scores.</p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <tr>
+                  <th scope="col" class="py-4 px-6">STUDENT</th>
+                  <th scope="col" class="py-4 px-4">ENROLLMENT NO.</th>
+                  <th scope="col" class="py-4 px-4">TARGET COMPANY & ROLE</th>
+                  <th scope="col" class="py-4 px-4">SCORE</th>
+                  <th scope="col" class="py-4 px-4">STATUS</th>
+                  <th scope="col" class="py-4 px-4">DATE & TIME</th>
+                  <th scope="col" class="py-4 px-6 text-right">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#D9E8FF] text-[#2176FF] flex items-center justify-center font-bold text-xs">AS</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Aditya Sharma</div><div class="text-[11px] text-slate-400">2026 Batch</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">SEC26CSE001<div class="text-[10px] text-slate-400">CSE Engineering</div></td>
+                  <td class="py-4 px-4"><span class="font-bold text-slate-900">Flipkart</span><div class="text-[11px] text-slate-500">Software Development Engineer 1</div></td>
+                  <td class="py-4 px-4 font-extrabold text-slate-900 text-sm">93%</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Strong Hire</span></td>
+                  <td class="py-4 px-4 text-slate-500">Today 02:30PM</td>
+                  <td class="py-4 px-6 text-right"><button onclick="viewMockTelemetry('Aditya Sharma', 93, 'Strong Hire')" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px]">View</button></td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#EEF5FF] text-[#2176FF] flex items-center justify-center font-bold text-xs">MS</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Meera Singh</div><div class="text-[11px] text-slate-400">2025 Batch</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">SEC25ECE002<div class="text-[10px] text-slate-400">ECE Engineering</div></td>
+                  <td class="py-4 px-4"><span class="font-bold text-slate-900">Google</span><div class="text-[11px] text-slate-500">Product Manager</div></td>
+                  <td class="py-4 px-4 font-extrabold text-slate-900 text-sm">64%</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#FFF6E9] text-[#E08A00] font-semibold border border-[#FFE8C2]">Needs Practice</span></td>
+                  <td class="py-4 px-4 text-slate-500">Yesterday 11:00AM</td>
+                  <td class="py-4 px-6 text-right"><button onclick="viewMockTelemetry('Meera Singh', 64, 'Needs Practice')" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px]">View</button></td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#E0E7FF] text-[#4F46E5] flex items-center justify-center font-bold text-xs">RK</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Rohit Kumar</div><div class="text-[11px] text-slate-400">2024 Batch</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">SEC24ME003<div class="text-[10px] text-slate-400">Mechanical Engineering</div></td>
+                  <td class="py-4 px-4"><span class="font-bold text-slate-900">Tesla</span><div class="text-[11px] text-slate-500">Mechanical Design Engineer</div></td>
+                  <td class="py-4 px-4 font-extrabold text-slate-900 text-sm">85%</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#EEF5FF] text-[#2176FF] font-semibold border border-[#D9E8FF]">Good</span></td>
+                  <td class="py-4 px-4 text-slate-500">Today 09:15AM</td>
+                  <td class="py-4 px-6 text-right"><button onclick="viewMockTelemetry('Rohit Kumar', 85, 'Good')" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px]">View</button></td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#DCFCE7] text-[#16A34A] flex items-center justify-center font-bold text-xs">LP</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Lina Patel</div><div class="text-[11px] text-slate-400">2026 Batch</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">SEC26CIV004<div class="text-[10px] text-slate-400">Civil Engineering</div></td>
+                  <td class="py-4 px-4"><span class="font-bold text-slate-900">L&T Construction</span><div class="text-[11px] text-slate-500">Project Engineer</div></td>
+                  <td class="py-4 px-4 font-extrabold text-slate-900 text-sm">90%</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Strong Hire</span></td>
+                  <td class="py-4 px-4 text-slate-500">Today 01:00PM</td>
+                  <td class="py-4 px-6 text-right"><button onclick="viewMockTelemetry('Lina Patel', 90, 'Strong Hire')" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px]">View</button></td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-[#FFF0F0] text-[#DE0000] flex items-center justify-center font-bold text-xs">SN</div>
+                      <div><div class="font-bold text-slate-900 text-sm">Sana Nair</div><div class="text-[11px] text-slate-400">2025 Batch</div></div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-4 font-mono text-slate-600">SEC25EEE005<div class="text-[10px] text-slate-400">Electrical Engineering</div></td>
+                  <td class="py-4 px-4"><span class="font-bold text-slate-900">Siemens</span><div class="text-[11px] text-slate-500">Electrical Engineer</div></td>
+                  <td class="py-4 px-4 font-extrabold text-slate-900 text-sm">43%</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#FFF0F0] text-[#DE0000] font-semibold border border-[#FFD6D6]">At Risk</span></td>
+                  <td class="py-4 px-4 text-slate-500">Yesterday 04:45PM</td>
+                  <td class="py-4 px-6 text-right"><button onclick="viewMockTelemetry('Sana Nair', 43, 'At Risk')" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px]">View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SECTION 7: NAAC / NIRF EVIDENCE                          -->
+      <!-- ======================================================== -->
+      <div id="section-naac_nirf" class="space-y-6 hidden">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-extrabold text-[#27282A] tracking-tight">NAAC / NIRF Evidence</h1>
+            <p class="text-sm font-medium text-[#7B7B7B] mt-1">Generate a structured placement & activity data pack for your institutional accreditation filing (NAAC Criterion 5 / NIRF / AICTE). All figures are from AIVI Campus records.</p>
+          </div>
+          <button onclick="alert('Generating Full NAAC + NIRF Bundle (PDF & Excel)...')" class="px-5 py-2.5 rounded-xl bg-[#2176FF] hover:bg-[#1561E6] text-white text-xs font-bold flex items-center gap-2 shadow-sm shadow-blue-500/25 transition">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Generate Full Bundle</span>
+          </button>
+        </div>
+
+        <!-- Student Profile Completeness Monitor -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+          <div class="text-xs font-bold text-slate-900">Student Profile Completeness Monitor</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#EEF5FF] text-[#2176FF] flex items-center justify-center font-bold"><i data-lucide="user-check" class="w-5 h-5"></i></div>
+              <div><div class="text-xs text-slate-500 font-medium">Profile Completion</div><div class="text-xl font-extrabold text-slate-900">240</div></div>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#F5F0FF] text-[#7E54E0] flex items-center justify-center font-bold"><i data-lucide="bar-chart-2" class="w-5 h-5"></i></div>
+              <div><div class="text-xs text-slate-500 font-medium">Avg Technical Score</div><div class="text-xl font-extrabold text-slate-900">78.4/100</div></div>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#FFF0F0] text-[#DE0000] flex items-center justify-center font-bold"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>
+              <div><div class="text-xs text-slate-500 font-medium">Missing Status</div><div class="text-xl font-extrabold text-slate-900">12</div></div>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#FFF6E9] text-[#EFB930] flex items-center justify-center font-bold"><i data-lucide="phone-off" class="w-5 h-5"></i></div>
+              <div><div class="text-xs text-slate-500 font-medium">Missing Phone</div><div class="text-xl font-extrabold text-slate-900">5</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Statistics Preview AY 2024-25 -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-[#2176FF]"></i>
+              <span class="text-xs font-bold text-slate-900">Key Statistics Preview  -  AY 2024–25</span>
+            </div>
+            <span class="text-[11px] font-semibold text-[#01B32C] bg-[#E6F8EB] px-3 py-1 rounded-full border border-[#C2F2CC]">
+              ✓ Verified before submission
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-100">
+              <div class="text-[11px] font-bold text-slate-400">TOTAL STUDENTS</div>
+              <div class="text-2xl font-extrabold text-slate-900 mt-1">40</div>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-100">
+              <div class="text-[11px] font-bold text-slate-400">CAMPUS OFFERS</div>
+              <div class="text-2xl font-extrabold text-[#01B32C] mt-1">1 (2.5%)</div>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-100">
+              <div class="text-[11px] font-bold text-slate-400">AVG PACKAGE</div>
+              <div class="text-2xl font-extrabold text-[#2176FF] mt-1">8.4 LPA</div>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-100">
+              <div class="text-[11px] font-bold text-slate-400">SPRINT ENROLLED</div>
+              <div class="text-2xl font-extrabold text-[#7E54E0] mt-1">36</div>
+            </div>
+          </div>
+
+          <!-- Parameter Table -->
+          <div class="border border-slate-100 rounded-2xl overflow-hidden mt-4">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 border-b border-slate-100 font-bold text-slate-500">
+                <tr><th class="py-3 px-4">Parameter</th><th class="py-3 px-4">Value (from platform records)</th><th class="py-3 px-4">Notes</th></tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                <tr><td class="py-3 px-4 font-semibold">Students Registered</td><td class="py-3 px-4 font-bold text-slate-900">40</td><td class="py-3 px-4 text-slate-400">From profiles collection</td></tr>
+                <tr><td class="py-3 px-4 font-semibold">Campus Offer Recipients</td><td class="py-3 px-4 font-bold text-[#01B32C]">1 (2.5%)</td><td class="py-3 px-4 text-slate-400">Outcome=offer in drive_applications</td></tr>
+                <tr><td class="py-3 px-4 font-semibold">Higher Studies (self-declared)</td><td class="py-3 px-4 font-bold text-slate-900">3</td><td class="py-3 px-4 text-slate-400">Not independently verified</td></tr>
+                <tr><td class="py-3 px-4 font-semibold">Average Package (LPA)</td><td class="py-3 px-4 font-bold text-[#2176FF]">8.4 LPA</td><td class="py-3 px-4 text-slate-400">Avg of offer records</td></tr>
+                <tr><td class="py-3 px-4 font-semibold">Highest Package (LPA)</td><td class="py-3 px-4 font-bold text-[#01B32C]">19.5 LPA</td><td class="py-3 px-4 text-slate-400">From offer records</td></tr>
+                <tr><td class="py-3 px-4 font-semibold">Companies Participated</td><td class="py-3 px-4 font-bold text-slate-900">8</td><td class="py-3 px-4 text-slate-400">Drive participants</td></tr>
+                <tr><td class="py-3 px-4 font-semibold">Mock Interview Sessions</td><td class="py-3 px-4 font-bold text-slate-900">80</td><td class="py-3 px-4 text-slate-400">Platform session count</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SECTION 8: BILLINGS                                      -->
+      <!-- ======================================================== -->
+      <div id="section-billings" class="space-y-6 hidden">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-extrabold text-[#27282A] tracking-tight">Campus Plan & Commercial Telemetry</h1>
+            <p class="text-sm font-medium text-[#7B7B7B] mt-1">Manage license seats, tax invoices, offline PO submissions & usage meters.</p>
+          </div>
+          <button onclick="alert('Generating statutory Tax PO Invoice...')" class="px-5 py-2.5 rounded-xl bg-[#2176FF] hover:bg-[#1561E6] text-white text-xs font-bold flex items-center gap-2 shadow-sm shadow-blue-500/25 transition">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            <span>Generate Offline PO Tax</span>
+          </button>
+        </div>
+
+        <!-- Seat License Utilization -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">Institutional Seat License Utilization</h3>
+              <p class="text-xs text-slate-400">742 out of 1000 student seats assigned.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-extrabold text-slate-900">748/1,000 Seats</span>
+              <button class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">Manage Seats</button>
+            </div>
+          </div>
+          <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full bg-[#2176FF] rounded-full" style="width: 74.8%"></div>
+          </div>
+        </div>
+
+        <!-- 4 Telemetry Meters -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm">
+            <div class="w-10 h-10 rounded-2xl bg-[#EEF5FF] text-[#2176FF] flex items-center justify-center font-bold"><i data-lucide="cpu" class="w-5 h-5"></i></div>
+            <div class="mt-4">
+              <div class="text-xs font-semibold text-[#7B7B7B]">AI Token Usage</div>
+              <div class="text-2xl font-extrabold text-slate-900 mt-1">1,420,000</div>
+              <div class="text-[11px] text-slate-400">Of 5,000,000 Tokens</div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm">
+            <div class="w-10 h-10 rounded-2xl bg-[#F5F0FF] text-[#7E54E0] flex items-center justify-center font-bold"><i data-lucide="users" class="w-5 h-5"></i></div>
+            <div class="mt-4">
+              <div class="text-xs font-semibold text-[#7B7B7B]">Active Students</div>
+              <div class="text-2xl font-extrabold text-slate-900 mt-1">784/1000</div>
+              <div class="text-[11px] text-slate-400">Seats Assigned</div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm">
+            <div class="w-10 h-10 rounded-2xl bg-[#E6F8EB] text-[#01B32C] flex items-center justify-center font-bold"><i data-lucide="mic" class="w-5 h-5"></i></div>
+            <div class="mt-4">
+              <div class="text-xs font-semibold text-[#7B7B7B]">AI Voice Used</div>
+              <div class="text-2xl font-extrabold text-slate-900 mt-1">89,040</div>
+              <div class="text-[11px] text-slate-400">English & Hindlish interviews</div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm">
+            <div class="w-10 h-10 rounded-2xl bg-[#FFF6E9] text-[#EFB930] flex items-center justify-center font-bold"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+            <div class="mt-4">
+              <div class="text-xs font-semibold text-[#7B7B7B]">Billing Status</div>
+              <div class="text-2xl font-extrabold text-[#01B32C] mt-1">Active</div>
+              <div class="text-[11px] text-slate-400">Active till 25 Jun 2027</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invoices Table -->
+        <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div class="p-6 border-b border-slate-100">
+            <h3 class="text-lg font-bold text-[#27282A]">Tax Invoices & Payment History (1)</h3>
+            <p class="text-xs text-[#7B7B7B]">Tax invoices issued for online Razorpay or offline PO government payments.</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 border-b border-slate-100 font-bold text-slate-400 uppercase">
+                <tr><th class="py-4 px-6">Invoice ID</th><th class="py-4 px-4">Mode</th><th class="py-4 px-4">Date</th><th class="py-4 px-4">Seats</th><th class="py-4 px-4">Total Amount</th><th class="py-4 px-4">Status</th><th class="py-4 px-6 text-right">Download</th></tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr>
+                  <td class="py-4 px-6 font-mono font-bold text-slate-800">INV-2026-SUNRISE-001</td>
+                  <td class="py-4 px-4 text-slate-600">Offline</td>
+                  <td class="py-4 px-4 text-slate-600">12 Aug 2026</td>
+                  <td class="py-4 px-4 text-slate-600">1000</td>
+                  <td class="py-4 px-4 font-bold text-slate-900">₹2,40,000</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Paid</span></td>
+                  <td class="py-4 px-6 text-right"><button onclick="alert('Downloading invoice PDF...')" class="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition">⬇ PDF</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- SECTION 9: STAFF & ROLES                                 -->
+      <!-- ======================================================== -->
+      <div id="section-staff_roles" class="space-y-6 hidden">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-extrabold text-[#27282A] tracking-tight">Staff Management</h1>
+            <p class="text-sm font-medium text-[#7B7B7B] mt-1">Manage TPO Directors, Placement Coordinators, and branch scope access control.</p>
+          </div>
+          <button onclick="openModal('modal-invite-coordinator')" class="px-5 py-2.5 rounded-xl bg-[#2176FF] hover:bg-[#1561E6] text-white text-xs font-bold flex items-center gap-2 shadow-sm shadow-blue-500/25 transition">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>Invite Placement Coordinator</span>
+          </button>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div class="p-6 border-b border-slate-100">
+            <h3 class="text-lg font-bold text-[#27282A]">Institutional Staff Roster</h3>
+            <p class="text-xs text-[#7B7B7B]">Authorized staff members with access to your campus placement portal.</p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <tr>
+                  <th scope="col" class="py-4 px-6">Staff Name</th>
+                  <th scope="col" class="py-4 px-4">Email</th>
+                  <th scope="col" class="py-4 px-4">Role</th>
+                  <th scope="col" class="py-4 px-4">Assigned Branch Scope</th>
+                  <th scope="col" class="py-4 px-4">Status</th>
+                  <th scope="col" class="py-4 px-6 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6 font-bold text-slate-900 text-sm">Dr. Rajesh Sharma</td>
+                  <td class="py-4 px-4 text-slate-600 font-mono">tpo@sunrise.ac.in</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full bg-[#01B32C] text-white font-bold text-[11px]">Placement Director</span></td>
+                  <td class="py-4 px-4 text-slate-700 font-medium">All Branches (Global)</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Active</span></td>
+                  <td class="py-4 px-6 text-right"><button onclick="toggleStaff(this)" class="px-3 py-1 rounded-lg border border-[#DE0000] text-[#DE0000] hover:bg-[#FFF0F0] font-bold text-[11px] transition">Deactivate</button></td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6 font-bold text-slate-900 text-sm">Ms. Anjali Verma</td>
+                  <td class="py-4 px-4 text-slate-600 font-mono">anv@sunrise.ac.in</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full border border-[#01B32C] text-[#01B32C] font-semibold text-[11px]">Coordinator</span></td>
+                  <td class="py-4 px-4 text-slate-700 font-medium">Computer Science & IT</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full bg-[#E6F8EB] text-[#01B32C] font-semibold border border-[#C2F2CC]">Active</span></td>
+                  <td class="py-4 px-6 text-right"><button onclick="toggleStaff(this)" class="px-3 py-1 rounded-lg border border-[#DE0000] text-[#DE0000] hover:bg-[#FFF0F0] font-bold text-[11px] transition">Deactivate</button></td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="py-4 px-6 font-bold text-slate-900 text-sm">Mr. Vikram Singh</td>
+                  <td class="py-4 px-4 text-slate-600 font-mono">vikram.s@sunrise.ac.in</td>
+                  <td class="py-4 px-4"><span class="px-3 py-1 rounded-full border border-[#01B32C] text-[#01B32C] font-semibold text-[11px]">Coordinator</span></td>
+                  <td class="py-4 px-4 text-slate-700 font-medium">Mechanical Engineering</td>
+                  <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 font-semibold border border-slate-200">Inactive</span></td>
+                  <td class="py-4 px-6 text-right"><button onclick="toggleStaff(this)" class="px-3 py-1 rounded-lg border border-[#01B32C] text-[#01B32C] hover:bg-[#E6F8EB] font-bold text-[11px] transition">Activate</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==================== SLIDE-OVER STUDENT DRAWER ==================== -->
+  <div id="student-drawer" class="fixed inset-0 z-50 overflow-hidden pointer-events-none transition-all duration-300 opacity-0">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 drawer-backdrop transition-opacity" onclick="closeStudentDrawer()"></div>
+
+    <div class="fixed inset-y-0 right-0 max-w-full flex pl-10 pointer-events-auto">
+      <div id="drawer-panel" class="w-screen max-w-md bg-white shadow-2xl p-6 flex flex-col justify-between overflow-y-auto custom-scrollbar transform translate-x-full transition duration-300">
+        <!-- Drawer Header -->
+        <div>
+          <div class="flex items-center justify-between pb-5 border-b border-slate-100">
+            <div class="flex items-center gap-2 text-xs font-bold text-[#2176FF]">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Student Intelligence Telemetry</span>
+            </div>
+            <button onclick="closeStudentDrawer()" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 transition">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Student Profile Card in Drawer -->
+          <div class="py-6 border-b border-slate-100 flex items-start gap-4">
+            <div id="drawer-avatar" class="w-14 h-14 rounded-2xl bg-[#EEF5FF] text-[#2176FF] flex items-center justify-center font-extrabold text-xl shrink-0 shadow-sm">
+              AS
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 id="drawer-name" class="text-xl font-bold text-slate-900 leading-tight">Aditya Sharma</h3>
+              <div id="drawer-enrollment" class="text-xs text-slate-400 font-mono mt-0.5">CSE25-1048</div>
+              <div class="flex items-center gap-2 mt-2">
+                <span id="drawer-branch" class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-bold">CSE</span>
+                <span id="drawer-batch" class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-bold">2026 Batch</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AES & Performance Radar -->
+          <div class="py-6 border-b border-slate-100 space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700">Employability Score (AES)</span>
+              <div class="flex items-center gap-1.5">
+                <span id="drawer-aes" class="text-2xl font-black text-slate-900">82</span>
+                <span class="text-xs text-slate-400">/ 100</span>
+              </div>
+            </div>
+            <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div id="drawer-aes-bar" class="h-full bg-[#01B32C] rounded-full transition-all duration-500" style="width: 82%"></div>
+            </div>
+
+            <!-- 3 Pillar Breakdown -->
+            <div class="grid grid-cols-3 gap-2 pt-2">
+              <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                <div class="text-[10px] text-slate-400 font-bold uppercase">ATS Resume</div>
+                <div class="text-base font-extrabold text-slate-900 mt-1">94%</div>
+                <div class="text-[9px] text-[#01B32C] font-semibold mt-0.5">Taleo Passed</div>
+              </div>
+              <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                <div class="text-[10px] text-slate-400 font-bold uppercase">Voice Mock</div>
+                <div class="text-base font-extrabold text-slate-900 mt-1">88%</div>
+                <div class="text-[9px] text-[#2176FF] font-semibold mt-0.5">124 WPM</div>
+              </div>
+              <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                <div class="text-[10px] text-slate-400 font-bold uppercase">Coding Fit</div>
+                <div class="text-base font-extrabold text-slate-900 mt-1">79%</div>
+                <div class="text-[9px] text-[#EFB930] font-semibold mt-0.5">Level 3</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Status & Activity -->
+          <div class="py-6 space-y-4">
+            <div class="text-xs font-bold text-slate-700">Placement & Verification State</div>
+            <div class="space-y-2.5 text-xs">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50">
+                <span class="text-slate-500">Readiness Status</span>
+                <span id="drawer-readiness" class="px-2.5 py-0.5 rounded-full font-bold bg-[#E6F8EB] text-[#01B32C]">Industry Ready</span>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50">
+                <span class="text-slate-500">Current Placement Status</span>
+                <span id="drawer-status" class="px-2.5 py-0.5 rounded-full font-bold bg-[#EEF5FF] text-[#2176FF]">Interview Ready</span>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50">
+                <span class="text-slate-500">Last Telemetry Active</span>
+                <span id="drawer-last-active" class="font-bold text-slate-700">12 min ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drawer Bottom Action Buttons -->
+        <div class="pt-6 border-t border-slate-100 space-y-2">
+          <button onclick="alert('Notification sent to candidate via WhatsApp & institutional email!')" class="w-full py-3 rounded-xl bg-[#2176FF] hover:bg-[#1561E6] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm shadow-blue-500/20 transition">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>Send AI Interview Nudge</span>
+          </button>
+          <button onclick="closeStudentDrawer()" class="w-full py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold transition">
+            Close Panel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== GENERIC MODALS ==================== -->
+  <!-- Import Students Modal -->
+  <div id="modal-import-students" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold text-slate-900">Import Students (CSV Bulk Ingestion)</h3>
+        <button onclick="closeModal('modal-import-students')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <p class="text-xs text-slate-500">Upload a 5k student CSV roster containing Name, Enrollment No, Branch, Batch, and Mobile.</p>
+      <div class="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center hover:border-[#2176FF] transition cursor-pointer">
+        <i data-lucide="upload-cloud" class="w-8 h-8 text-[#2176FF] mx-auto"></i>
+        <div class="text-xs font-bold text-slate-700 mt-2">Click or drag CSV file here</div>
+        <div class="text-[10px] text-slate-400 mt-0.5">Supports UTF-8 CSV up to 10MB</div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-import-students')" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancel</button>
+        <button onclick="closeModal('modal-import-students'); alert('Students ingested successfully! Roster updated.')" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#2176FF] text-white shadow-sm">Upload & Process</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Drive Modal -->
+  <div id="modal-create-drive" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold text-slate-900">Create Campus Drive</h3>
+        <button onclick="closeModal('modal-create-drive')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Company Name</label>
+          <input type="text" placeholder="e.g. Google India, Flipkart, TCS" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-[#2176FF]">
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Offered Role</label>
+          <input type="text" placeholder="e.g. Software Development Engineer" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-[#2176FF]">
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">CTC Package (LPA)</label>
+          <input type="text" placeholder="e.g. ₹8.5 LPA" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-[#2176FF]">
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-create-drive')" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancel</button>
+        <button onclick="closeModal('modal-create-drive'); alert('Placement Drive created!')" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#2176FF] text-white shadow-sm">Publish Drive</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Launch AI Sprint Modal -->
+  <div id="modal-create-sprint" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold text-slate-900">Launch New AI Sprint</h3>
+        <button onclick="closeModal('modal-create-sprint')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <p class="text-xs text-slate-500">Configure a 7-day automated voice and ATS prep campaign customized to a corporate syllabus.</p>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Sprint Campaign Name</label>
+          <input type="text" placeholder="e.g. Microsoft Azure AI Intensive Sprint" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-[#2176FF]">
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Target Batch</label>
+          <select class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 outline-none">
+            <option>Batch 2026</option>
+            <option>Batch 2025</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-create-sprint')" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancel</button>
+        <button onclick="closeModal('modal-create-sprint'); alert('AI Sprint Campaign deployed!')" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#2176FF] text-white shadow-sm">Launch Sprint</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invite Staff Modal -->
+  <div id="modal-invite-coordinator" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold text-slate-900">Invite Placement Coordinator</h3>
+        <button onclick="closeModal('modal-invite-coordinator')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Coordinator Name</label>
+          <input type="text" placeholder="e.g. Prof. Sameer Deshmukh" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-[#2176FF]">
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Official College Email</label>
+          <input type="email" placeholder="sameer.d@sunrise.ac.in" class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-[#2176FF]">
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Assigned Department Scope</label>
+          <select class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 outline-none">
+            <option>Computer Science & IT</option>
+            <option>Electronics & Communication</option>
+            <option>Mechanical Engineering</option>
+            <option>All Branches (Global)</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-invite-coordinator')" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancel</button>
+        <button onclick="closeModal('modal-invite-coordinator'); alert('Invitation sent to coordinator email!')" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#2176FF] text-white shadow-sm">Send Invitation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // Master Student Roster Database
+    const STUDENTS = [
+      { id: '1', name: 'Aditya Sharma', avatar: 'AS', enrollment: 'CSE25-1048', branch: 'CSE', batch: '2026', aes: 82, readiness: 'Industry Ready', lastActive: '12 min ago', status: 'Interview Ready' },
+      { id: '2', name: 'Rohan Mehta', avatar: 'RM', enrollment: 'CSE25-1182', branch: 'CSE', batch: '2026', aes: 82, readiness: 'Industry Ready', lastActive: '12 min ago', status: 'Interview Ready' },
+      { id: '3', name: 'Priya Verma', avatar: 'PV', enrollment: 'ECE25-0874', branch: 'ECE', batch: '2026', aes: 68, readiness: 'Proficient', lastActive: '12 min ago', status: 'Interview Ready' },
+      { id: '4', name: 'Neha Patel', avatar: 'NP', enrollment: 'IT24-0935', branch: 'IT', batch: '2025', aes: 74, readiness: 'Proficient', lastActive: '12 min ago', status: 'Placed' },
+      { id: '5', name: 'Karan Singh', avatar: 'KS', enrollment: 'ME25-0621', branch: 'Mechanical', batch: '2025', aes: 42, readiness: 'Developing', lastActive: '12 min ago', status: 'Placed' },
+      { id: '6', name: 'Arjun Rao', avatar: 'AR', enrollment: 'CSE25-1264', branch: 'CSE', batch: '2026', aes: 59, readiness: 'Developing', lastActive: 'Yesterday', status: 'In Progress' },
+      { id: '7', name: 'Vivek Nair', avatar: 'VN', enrollment: 'ME25-0559', branch: 'Mechanical', batch: '2026', aes: 36, readiness: 'At Risk', lastActive: 'Yesterday', status: 'Not Started' },
+      { id: '8', name: 'Karan Johar', avatar: 'KJ', enrollment: 'SIT2026007', branch: 'CSE', batch: '2026', aes: 38, readiness: 'At Risk', lastActive: '12d ago', status: 'Needs Attention' },
+    ];
+
+    // Navigation Switcher
+    const SECTIONS = ['dashboard', 'student_roster', 'placement_drives', 'sprints_campaigns', 'resume_vault', 'ai_lab', 'naac_nirf', 'billings', 'staff_roles'];
+
+    // Smooth Ease-Out Counter Animation
+    function animateCounter(id, start, end, duration, formatComma = false, suffix = '') {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const startTime = performance.now();
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Cubic ease-out matching Figma prototype curves
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(start + (end - start) * ease);
+        el.innerText = (formatComma ? current.toLocaleString() : current) + suffix;
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.innerText = (formatComma ? end.toLocaleString() : end) + suffix;
+        }
+      }
+      requestAnimationFrame(update);
+    }
+
+    // Dashboard Dynamic Metric & Motion Trigger
+    function animateDashboardMetrics() {
+      // 1. Donut Gauge Stroke Fill & Score Counter
+      const circle = document.getElementById('readiness-gauge-circle');
+      if (circle) {
+        circle.style.strokeDashoffset = '251.2';
+        setTimeout(() => {
+          circle.style.strokeDashoffset = '42.7';
+        }, 80);
+      }
+      animateCounter('readiness-score-number', 0, 83, 1100);
+
+      // 2. Sub-bars smooth width glide
+      const skills = document.getElementById('readiness-bar-skills');
+      const resume = document.getElementById('readiness-bar-resume');
+      const portfolio = document.getElementById('readiness-bar-portfolio');
+      if (skills) { skills.style.width = '0%'; setTimeout(() => skills.style.width = '82%', 140); }
+      if (resume) { resume.style.width = '0%'; setTimeout(() => resume.style.width = '96%', 260); }
+      if (portfolio) { portfolio.style.width = '0%'; setTimeout(() => portfolio.style.width = '77%', 380); }
+
+      // 3. 4 KPI Metric Counters
+      animateCounter('kpi-students-count', 0, 2400, 950, true);
+      animateCounter('kpi-resumes-count', 0, 75, 850, false, '%');
+      animateCounter('kpi-drives-count', 0, 3, 600);
+      animateCounter('kpi-risk-count', 0, 2, 500);
+
+      // 4. Stagger Funnel Pillars Grow Animation
+      document.querySelectorAll('.funnel-cylinder').forEach((el, idx) => {
+        el.style.animation = 'none';
+        void el.offsetWidth; // Reflow
+        el.style.animation = `pillarGrow 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${idx * 75}ms forwards`;
+      });
+    }
+
+    function switchTab(targetId) {
+      SECTIONS.forEach(id => {
+        const sec = document.getElementById('section-' + id);
+        const nav = document.getElementById('nav-' + id);
+        if (sec) {
+          sec.classList.add('hidden');
+          sec.classList.remove('animate-fade-in-up');
+        }
+        if (nav) {
+          nav.className = 'nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium transition text-left';
+        }
+      });
+
+      const activeSec = document.getElementById('section-' + targetId);
+      const activeNav = document.getElementById('nav-' + targetId);
+      if (activeSec) {
+        activeSec.classList.remove('hidden');
+        void activeSec.offsetWidth; // trigger reflow for smooth animation
+        activeSec.classList.add('animate-fade-in-up');
+      }
+      if (activeNav) {
+        activeNav.className = 'nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition text-left bg-[#2176FF] text-white shadow-sm shadow-blue-500/25';
+      }
+
+      // Trigger section-specific motion
+      if (targetId === 'dashboard') {
+        animateDashboardMetrics();
+      } else if (targetId === 'student_roster') {
+        filterRoster();
+      }
+
+      lucide.createIcons();
+    }
+
+    // Render Student Roster Table with Staggered Row Entry
+    function renderRoster(students) {
+      const tbody = document.getElementById('roster-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      students.forEach((st, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = 'stagger-row hover:bg-slate-50/80 transition cursor-pointer group';
+        tr.style.animationDelay = `${idx * 40}ms`;
+        tr.onclick = () => openStudentDrawer(st.name, st.enrollment, st.branch, st.batch, st.aes, st.readiness, st.lastActive, st.status);
+
+        // Score Bar Color
+        let barColor = '#01B32C';
+        if (st.aes < 50) barColor = '#DE0000';
+        else if (st.aes < 65) barColor = '#EFB930';
+        else if (st.aes < 80) barColor = '#2176FF';
+
+        // Readiness Badge
+        let readyBadge = 'bg-[#E6F8EB] text-[#01B32C] border-[#C2F2CC]';
+        if (st.readiness === 'Proficient') readyBadge = 'bg-[#EEF5FF] text-[#2176FF] border-[#D9E8FF]';
+        else if (st.readiness === 'Developing') readyBadge = 'bg-[#FFF6E9] text-[#E08A00] border-[#FFE8C2]';
+        else if (st.readiness === 'At Risk') readyBadge = 'bg-[#FFF0F0] text-[#DE0000] border-[#FFD6D6]';
+
+        // Placement Status Badge
+        let statusBadge = 'bg-[#EEF5FF] text-[#2176FF] border-[#D9E8FF]';
+        if (st.status === 'Placed') statusBadge = 'bg-[#E6F8EB] text-[#01B32C] border-[#C2F2CC]';
+        else if (st.status === 'In Progress') statusBadge = 'bg-[#F5F0FF] text-[#7E54E0] border-[#E9DEFF]';
+        else if (st.status === 'Not Started' || st.status === 'Needs Attention') statusBadge = 'bg-slate-100 text-slate-600 border-slate-200';
+
+        tr.innerHTML = `
+          <td class="py-4 px-6">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-[#D9E8FF] text-[#2176FF] flex items-center justify-center font-bold text-xs shrink-0 group-hover:scale-105 transition-transform">${st.avatar}</div>
+              <div><div class="font-bold text-slate-900 text-sm group-hover:text-[#2176FF] transition-colors">${st.name}</div><div class="text-[11px] text-slate-400">${st.enrollment}</div></div>
+            </div>
+          </td>
+          <td class="py-4 px-4 font-mono text-slate-600">${st.enrollment}</td>
+          <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-lg bg-slate-100 font-semibold">${st.branch}</span></td>
+          <td class="py-4 px-4 text-slate-600">${st.batch}</td>
+          <td class="py-4 px-4">
+            <div class="inline-flex flex-col">
+              <span class="font-extrabold text-slate-900 text-sm">${st.aes}</span>
+              <span class="w-8 h-1 rounded-full mt-0.5" style="background-color: ${barColor}"></span>
+            </div>
+          </td>
+          <td class="py-4 px-4">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold text-[11px] border ${readyBadge}">
+              <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${barColor}"></span>
+              ${st.readiness}
+            </span>
+          </td>
+          <td class="py-4 px-4 text-slate-500">${st.lastActive}</td>
+          <td class="py-4 px-4">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold text-[11px] border ${statusBadge}">
+              ● ${st.status}
+            </span>
+          </td>
+          <td class="py-4 px-6 text-right">
+            <button class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 transition ml-auto group-hover:translate-x-1 duration-200">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      lucide.createIcons();
+    }
+
+    // Filter Roster
+    function filterRoster() {
+      const q = (document.getElementById('roster-search')?.value || '').toLowerCase();
+      const b = document.getElementById('roster-branch-filter')?.value || 'ALL';
+      const r = document.getElementById('roster-readiness-filter')?.value || 'ALL';
+      const s = document.getElementById('roster-status-filter')?.value || 'ALL';
+
+      const filtered = STUDENTS.filter(st => {
+        const matchesQ = st.name.toLowerCase().includes(q) || st.enrollment.toLowerCase().includes(q);
+        const matchesB = b === 'ALL' || st.branch === b;
+        const matchesR = r === 'ALL' || st.readiness === r;
+        const matchesS = s === 'ALL' || st.status === s;
+        return matchesQ && matchesB && matchesR && matchesS;
+      });
+      renderRoster(filtered);
+    }
+
+    // Slide-Over Drawer Controls with Spring Transitions
+    function openStudentDrawer(name, enrollment, branch, batch, aes, readiness, lastActive, status) {
+      document.getElementById('drawer-name').innerText = name;
+      document.getElementById('drawer-enrollment').innerText = enrollment;
+      document.getElementById('drawer-branch').innerText = branch;
+      document.getElementById('drawer-batch').innerText = batch + ' Batch';
+      document.getElementById('drawer-aes').innerText = aes;
+      document.getElementById('drawer-readiness').innerText = readiness;
+      document.getElementById('drawer-status').innerText = status;
+      document.getElementById('drawer-last-active').innerText = lastActive;
+      document.getElementById('drawer-avatar').innerText = name.split(' ').map(n=>n[0]).join('');
+
+      // Animate AES Progress Bar
+      const bar = document.getElementById('drawer-aes-bar');
+      if (bar) {
+        bar.style.width = '0%';
+        setTimeout(() => {
+          bar.style.width = aes + '%';
+        }, 120);
+      }
+
+      const drawer = document.getElementById('student-drawer');
+      const panel = document.getElementById('drawer-panel');
+      drawer.classList.remove('opacity-0', 'pointer-events-none');
+      panel.classList.remove('translate-x-full');
+    }
+
+    function closeStudentDrawer() {
+      const drawer = document.getElementById('student-drawer');
+      const panel = document.getElementById('drawer-panel');
+      panel.classList.add('translate-x-full');
+      // Wait for slide-out to finish before hiding backdrop
+      setTimeout(() => {
+        drawer.classList.add('opacity-0', 'pointer-events-none');
+      }, 260);
+    }
+
+    // Modals with Scale-In Animation
+    function openModal(id) {
+      const m = document.getElementById(id);
+      if (!m) return;
+      m.classList.remove('hidden');
+      const box = m.querySelector('div');
+      if (box) {
+        box.classList.remove('animate-scale-in');
+        void box.offsetWidth;
+        box.classList.add('animate-scale-in');
+      }
+    }
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (!m) return;
+      m.classList.add('hidden');
+    }
+
+    // Interactive Nudge with checkmark animation
+    function triggerNudge(btn) {
+      btn.innerHTML = '<span>Nudge Sent via WhatsApp</span> <i data-lucide="check" class="w-3.5 h-3.5"></i>';
+      btn.className = 'w-full py-2.5 px-4 rounded-xl bg-[#E6F8EB] text-[#01B32C] font-bold text-xs flex items-center justify-center gap-1.5 transition border border-[#C2F2CC] scale-98';
+      lucide.createIcons();
+    }
+
+    function toggleStaff(btn) {
+      if (btn.innerText === 'Deactivate') {
+        btn.innerText = 'Activate';
+        btn.className = 'px-3 py-1 rounded-lg border border-[#01B32C] text-[#01B32C] hover:bg-[#E6F8EB] font-bold text-[11px] transition interactive-btn';
+      } else {
+        btn.innerText = 'Deactivate';
+        btn.className = 'px-3 py-1 rounded-lg border border-[#DE0000] text-[#DE0000] hover:bg-[#FFF0F0] font-bold text-[11px] transition interactive-btn';
+      }
+    }
+
+    function previewResume(name) {
+      alert(`Opening verified ATS resume for ${name} with official campus QR authentication seal.`);
+    }
+
+    function exportRecruiterPackage() {
+      alert('Packaging all 2,400 verified student resumes into a structured ZIP file sorted by branch and AES score...');
+    }
+
+    function exportCSV() {
+      alert('Exporting student roster CSV with real-time AES scores and telemetry...');
+    }
+
+    function viewMockTelemetry(name, score, status) {
+      alert(`Candidate: ${name}\nForensic Score: ${score}%\nEvaluation: ${status}\nWPM: 128 | STAR Rubric: 86%\nHinglish Transition: 92%`);
+    }
+
+    // Global Search Sync
+    document.getElementById('global-search')?.addEventListener('input', (e) => {
+      const q = e.target.value;
+      if (q.trim() !== '') {
+        switchTab('student_roster');
+        const rosterInput = document.getElementById('roster-search');
+        if (rosterInput) {
+          rosterInput.value = q;
+          filterRoster();
+        }
+      }
+    });
+
+    // Initial Load
+    renderRoster(STUDENTS);
+    animateDashboardMetrics();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
